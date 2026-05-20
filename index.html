@@ -646,65 +646,106 @@ async function removeStreet(zId,nbName,street) {
 }
 
 // ── RESOURCES ─────────────────────────────────────────────────────
-function renderResources() {
-  // Pricing
-  let ph=`<div class="golden-rule"><div class="gr-title">GOLDEN RULE</div><div class="gr-body">Always quote the full price first. The bundle discount is your closing tool — never your opening offer. If a homeowner pushes back, that's when you bring out the $50 bundle.</div></div>`;
-  PRICING.forEach((p,pi)=>{
-    ph+=`<div class="collapsible"><button class="coll-header" data-coll="p${pi}"><span class="ch-title" style="color:#bbb">${p.service}</span><span class="ch-arrow" id="pa${pi}">▼</span></button>
-    <div class="coll-body" id="pb${pi}" style="display:none">
-      <table class="price-table"><tr><th class="th">SIZE</th><th class="th">PRICE</th><th class="th">NOTE</th></tr>
-      ${p.rows.map(r=>`<tr><td class="td-size">${r.l}</td><td class="td-price" style="color:${p.color}">${r.p}</td><td class="td-note">${r.n}</td></tr>`).join('')}
-      </table>
-      ${p.rule?`<div class="price-extra">${p.rule}</div>`:''}
-    </div></div>`;
-  });
-  ph+=`<div class="collapsible"><button class="coll-header" data-coll="bundle" style="background:#0f0f0f;border-color:rgba(245,158,11,.2)"><span class="ch-title" style="color:#f59e0b">★ Bundle Discounts — Your Closing Tool</span><span class="ch-arrow" id="bundlea">▼</span></button>
-  <div class="coll-body" id="bundleb" style="display:none">
-    <div style="font-size:10px;color:#777;margin-bottom:10px;line-height:1.5">Quote both services at full price first. If they hesitate: "If we book both today, I can knock $50 off the total." Make them earn it.</div>
-    <div class="bundle-tier"><span class="bt-label">Any 2 services booked together</span><span class="bt-val">$50 off</span></div>
-    <div class="bundle-tier"><span class="bt-label">High-ticket bundle (well above min)</span><span class="bt-val">Up to $100 off</span></div>
-    <div class="bundle-tier"><span class="bt-label">Anything beyond $100 off</span><span class="bt-val">Manager approval required</span></div>
-    <div class="do-dont">
-      <div class="col"><div class="col-title" style="color:#22c55e">DO ✓</div>${['Quote full price first','Lead with higher end of range','Use bundle only when closing','Make customer earn the discount','Charge for hard-to-reach work','Confirm screen removal liability'].map(d=>`<div class="col-item" style="color:#1a4a1a">• ${d}</div>`).join('')}</div>
-      <div class="col"><div class="col-title" style="color:#ef4444">DON'T ✗</div>${['Open with bundle price','Drop below minimums without approval','Throw in haul-away for free','Quote pavers on the door','Discount the discount','Promise free screens unless $100+ above min'].map(d=>`<div class="col-item" style="color:#4a1a1a">• ${d}</div>`).join('')}</div>
-    </div>
-  </div></div>`;
-  document.getElementById('res-pricing').innerHTML=ph;
 
-  // Script
-  let sh=`<div style="font-size:10px;color:#444;margin-bottom:12px;line-height:1.5">One opening. One qualifying question. Match to their need. Bust the smokescreen. Close.</div>`;
-  SCRIPT_SECTIONS.forEach((sec,si)=>{
-    sh+=`<div class="collapsible"><button class="coll-header" data-coll="s${si}"><span class="ch-title" style="color:#bbb">${sec.title}</span><span class="ch-arrow" id="sa${si}">▼</span></button>
-    <div class="coll-body" id="sb${si}" style="display:none">`;
-    sec.content.forEach(c=>{
-      sh+=`<div class="script-block"><div class="script-heading" style="color:${sec.color}">${c.h}</div>`;
-      if(c.bullets) sh+=`<div class="bullet-list">${c.bullets.map(b=>`<div>• ${b}</div>`).join('')}</div>`;
-      if(c.quote) sh+=`<div class="script-quote">${c.quote}</div>`;
-      if(c.cue)   sh+=`<div class="script-cue">👁 ${c.cue}</div>`;
-      if(c.note)  sh+=`<div class="script-note">⚡ ${c.note}</div>`;
-      if(c.bundle)sh+=`<div class="script-bundle">→ Bundle: ${c.bundle}</div>`;
-      if(c.follow)sh+=`<div class="script-follow">→ Follow up: ${c.follow}</div>`;
-      sh+=`</div>`;
+function toggleSection(id) {
+  var body = document.getElementById(id);
+  if (!body) return;
+  var isOpen = body.style.display === 'block';
+  body.style.display = isOpen ? 'none' : 'block';
+  var btn = body.previousElementSibling;
+  if (btn) {
+    var arrow = btn.querySelector('.arrow');
+    if (arrow) arrow.textContent = isOpen ? ' v' : ' ^';
+    btn.classList.toggle('open', !isOpen);
+  }
+}
+
+function buildResources() {
+  // PRICING
+  var pricing_html = '<div class="golden-rule"><div class="gr-title">GOLDEN RULE</div><div class="gr-body">Always quote the full price first. The bundle discount is your closing tool — never your opening offer. If a homeowner pushes back, that is when you bring out the $50 bundle.</div></div>';
+  
+  var services = [
+    {id:'win', title:'Window Cleaning', color:'#3b82f6',
+     rows:[['10-20 windows','$200 min','Bump up if hard-to-reach'],['20-30 windows','$299 min','Standard tier'],['30-40 windows','$399 min','Standard tier'],['40-50 windows','$499 min','Standard tier']],
+     note:'SCREENS: $5/screen. Free screen cleaning ONLY if quote is $100+ above minimum. Default: customer removes own screens. Hard-to-reach = price reflects that.'},
+    {id:'sol', title:'Solar Panel Cleaning', color:'#f59e0b',
+     rows:[['10-20 panels','$149 min','Entry tier'],['20-30 panels','$199 min','Standard tier'],['30-40 panels','$249-$299','Quote $299 first, drop to $249 only if needed'],['50+ panels','$349+ target up','Larger arrays = price reflects time']]},
+    {id:'hws', title:'House Washing (Soft Wash)', color:'#22c55e',
+     rows:[['1,500 sqft','$599 min','~40 cents/sqft'],['2,000 sqft','$700','~35 cents/sqft'],['3,000 sqft','$900','~30 cents/sqft'],['4,000 sqft','$1,100','~28 cents/sqft']],
+     note:'Rate range: 25-35 cents/sqft. Always lead with higher end. Soft wash ONLY on siding.'},
+    {id:'pw', title:'Pressure Washing', color:'#a78bfa',
+     rows:[['One-car driveway','$199','Reference point'],['Two-car driveway','$250','Reference point'],['Patios / walkways','~$0.25/sqft','Measure and quote']],
+     note:'Can throw in a small walkway as a freebie to lock the deal. Nothing bigger without approval.'},
+    {id:'gut', title:'Gutter Cleaning', color:'#34d399',
+     rows:[['Single-story standard','$199','Blowout'],['Small home (2 gutters)','$149','Use only if pushed'],['Two-story home','$249 min / $349 target','Lead with $349, drop to $249 if needed'],['Debris haul-away (add-on)','+$99','Only if customer insists']],
+     note:'Default = pile debris on-site. Tell them: I will pile it neatly so your gardener can grab it. Only offer haul-away if dealbreaker.'},
+    {id:'roof', title:'Roof Services', color:'#f43f5e',
+     rows:[['Roof blow-off (small home)','$100 min','Only for very small footprints'],['Roof blow-off (standard)','$199 min / $249 target','Target up whenever possible'],['Full roof soft wash','$0.40-$0.50/sqft','Includes moss scrubbing, gutter blowout, chemical soft wash']]},
+    {id:'pav', title:'Paver Resanding & Sealing', color:'#fb923c',
+     rows:[['Resanding & resealing','$2.50-$3.50/sqft','Book a quote. Andrew or lead comes out. Do NOT close on door.']]}
+  ];
+  
+  services.forEach(function(s) {
+    pricing_html += '<div class="collapsible">';
+    pricing_html += '<button class="coll-header" onclick="toggleSection(\'sec-'+s.id+'\')" style="width:100%;background:#0f0f0f;border:1px solid #1a1a1a;border-radius:8px;padding:10px 14px;display:flex;justify-content:space-between;align-items:center;text-align:left;cursor:pointer">';
+    pricing_html += '<span style="font-size:11px;font-weight:700;color:'+s.color+'">'+s.title+'</span>';
+    pricing_html += '<span class="arrow" style="font-size:12px;color:#444"> v</span></button>';
+    pricing_html += '<div id="sec-'+s.id+'" style="display:none;background:#0c0c0c;border:1px solid #161616;border-top:none;border-radius:0 0 8px 8px;padding:10px 14px">';
+    pricing_html += '<table style="width:100%;border-collapse:collapse">';
+    pricing_html += '<tr><td style="font-size:8px;color:#444;padding:3px 0;border-bottom:1px solid #1a1a1a">SIZE</td><td style="font-size:8px;color:#444;padding:3px 0;border-bottom:1px solid #1a1a1a">PRICE</td><td style="font-size:8px;color:#444;padding:3px 0;border-bottom:1px solid #1a1a1a">NOTE</td></tr>';
+    s.rows.forEach(function(r) {
+      pricing_html += '<tr><td style="font-size:10px;color:#aaa;padding:5px 0;border-bottom:1px solid #111;width:35%">'+r[0]+'</td><td style="font-size:10px;font-weight:700;color:'+s.color+';padding:5px 0;border-bottom:1px solid #111;width:25%">'+r[1]+'</td><td style="font-size:9px;color:#555;padding:5px 0;border-bottom:1px solid #111">'+r[2]+'</td></tr>';
     });
-    sh+=`</div></div>`;
+    pricing_html += '</table>';
+    if (s.note) pricing_html += '<div style="margin-top:8px;font-size:10px;color:#555;background:#111;border-radius:5px;padding:7px 10px;line-height:1.6;border-left:2px solid rgba(255,255,255,.1)">'+s.note+'</div>';
+    pricing_html += '</div></div>';
   });
-  document.getElementById('res-script').innerHTML=sh;
+
+  // Bundle section
+  pricing_html += '<div class="collapsible"><button class="coll-header" onclick="toggleSection(\'sec-bundle\')" style="width:100%;background:#0f0f0f;border:1px solid rgba(245,158,11,.2);border-radius:8px;padding:10px 14px;display:flex;justify-content:space-between;align-items:center;text-align:left;cursor:pointer"><span style="font-size:11px;font-weight:700;color:#f59e0b">Bundle Discounts - Your Closing Tool</span><span class="arrow" style="font-size:12px;color:#444"> v</span></button>';
+  pricing_html += '<div id="sec-bundle" style="display:none;background:#0c0c0c;border:1px solid #161616;border-top:none;border-radius:0 0 8px 8px;padding:10px 14px">';
+  pricing_html += '<div style="font-size:10px;color:#777;margin-bottom:10px;line-height:1.5">Quote both services at full price first. If they hesitate say: If we book both today I can knock $50 off the total. Make them earn it.</div>';
+  pricing_html += '<div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #141414"><span style="font-size:10px;color:#888">Any 2 services booked together</span><span style="font-size:10px;font-weight:700;color:#f59e0b">$50 off</span></div>';
+  pricing_html += '<div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #141414"><span style="font-size:10px;color:#888">High-ticket bundle (well above min)</span><span style="font-size:10px;font-weight:700;color:#f59e0b">Up to $100 off</span></div>';
+  pricing_html += '<div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #141414"><span style="font-size:10px;color:#888">Anything beyond $100 off</span><span style="font-size:10px;font-weight:700;color:#f59e0b">Manager approval required</span></div>';
+  pricing_html += '<div style="display:flex;gap:10px;margin-top:12px">';
+  pricing_html += '<div style="flex:1"><div style="font-size:9px;font-weight:700;color:#22c55e;margin-bottom:5px">DO</div>';
+  var dos = ['Quote full price first','Lead with higher end of range','Use bundle only when closing','Make customer earn the discount','Charge for hard-to-reach work','Confirm screen removal liability'];
+  dos.forEach(function(d){pricing_html+='<div style="font-size:9px;color:#1a4a1a;line-height:1.7">+ '+d+'</div>';});
+  pricing_html += '</div><div style="flex:1"><div style="font-size:9px;font-weight:700;color:#ef4444;margin-bottom:5px">DON'T</div>';
+  var donts = ['Open with bundle price','Drop below minimums without approval','Throw in haul-away for free','Quote pavers on the door','Discount the discount','Promise free screens unless $100+ above min'];
+  donts.forEach(function(d){pricing_html+='<div style="font-size:9px;color:#4a1a1a;line-height:1.7">- '+d+'</div>';});
+  pricing_html += '</div></div></div></div>';
+  
+  document.getElementById('res-pricing').innerHTML = pricing_html;
+
+  // SCRIPT
+  var script_html = '<div style="font-size:10px;color:#444;margin-bottom:12px;line-height:1.5">One opening. One qualifying question. Match to their need. Bust the smokescreen. Close.</div>';
+  
+  var sections = [
+    {id:'s0', title:'Before You Knock', color:'#64748b', html:'<div style="font-size:10px;font-weight:700;color:#64748b;margin-bottom:5px">Physical Setup</div><div style="display:flex;flex-direction:column;gap:2px;margin-bottom:10px"><div style="font-size:11px;color:#aaa;line-height:1.6">+ AJ Home Services shirt on - visible branding</div><div style="font-size:11px;color:#aaa;line-height:1.6">+ Clipboard or phone in hand - looks professional</div><div style="font-size:11px;color:#aaa;line-height:1.6">+ Stand 1-2 steps back from door - less threatening</div><div style="font-size:11px;color:#aaa;line-height:1.6">+ Feet shoulder width apart - grounded and confident</div><div style="font-size:11px;color:#aaa;line-height:1.6">+ Hands visible - never in pockets</div><div style="font-size:11px;color:#aaa;line-height:1.6">+ Smile before the door opens - it carries in your voice</div></div><div style="font-size:10px;font-weight:700;color:#64748b;margin-bottom:5px">Know Before You Knock</div><div style="display:flex;flex-direction:column;gap:2px"><div style="font-size:11px;color:#aaa;line-height:1.6">+ 1-2 neighbor names from Jobber on this street</div><div style="font-size:11px;color:#aaa;line-height:1.6">+ What services those neighbors booked</div><div style="font-size:11px;color:#aaa;line-height:1.6">+ Rough home size - look at the house before knocking</div><div style="font-size:11px;color:#aaa;line-height:1.6">+ Phone charged - you will book and log on the spot</div><div style="font-size:11px;color:#aaa;line-height:1.6">+ Business cards in pocket for every unanswered door</div></div>'},
+    {id:'s1', title:'Step 1 - The Opening', color:'#22d3ee', html:'<div style="font-size:10px;font-weight:700;color:#22d3ee;margin-bottom:5px">Standard Opening</div><div style="font-size:11px;color:#ccc;line-height:1.7;background:#111;border-radius:6px;padding:8px 10px;border-left:2px solid rgba(34,211,238,.3);margin-bottom:8px">Hey, how's it going? I'm [Name] with AJ Home Services. We're actually working on a few homes on your street this week - we just finished [neighbor]'s place down the block. We do everything on the exterior - house washing, gutters, windows, solar panels, pressure washing, roof cleaning. While we're already set up out here we have some availability and we're offering a group rate to neighbors. Is there anything on the exterior you've been meaning to get taken care of?</div><div style="font-size:10px;color:#555;background:#0e0e0e;border-radius:5px;padding:5px 8px;border-left:2px solid #333;margin-bottom:10px">Point down the street toward the neighbor's house when you say their name. Make eye contact when you ask the question.</div><div style="font-size:10px;font-weight:700;color:#22d3ee;margin-bottom:5px">Power Version - Just Finished Nearby</div><div style="font-size:11px;color:#ccc;line-height:1.7;background:#111;border-radius:6px;padding:8px 10px;border-left:2px solid rgba(34,211,238,.3);margin-bottom:8px">Hey - I'm [Name] with AJ Home Services. We literally just finished [neighbor]'s place right there. You can probably see the difference from here. While the crew is still set up on your street I wanted to see if there's anything we could take care of for you too. What's the biggest thing you've been wanting to get done out here?</div><div style="font-size:10px;color:#f59e0b;background:#1a1000;border-radius:5px;padding:5px 8px">Power version converts 2-3x better. Always knock the 5 nearest houses immediately after finishing a job - do not wait.</div>'},
+    {id:'s2', title:'Step 2 - The Qualifying Question', color:'#a78bfa', html:'<div style="font-size:11px;color:#ccc;line-height:1.7;background:#111;border-radius:6px;padding:8px 10px;border-left:2px solid rgba(167,139,250,.3);margin-bottom:8px">Let me ask you - when you look at the outside of your house, what bothers you most? Is it the exterior itself, the windows, the gutters, the driveway - or is there something specific you've been putting off?</div><div style="font-size:10px;color:#555;background:#0e0e0e;border-radius:5px;padding:5px 8px;border-left:2px solid #333;margin-bottom:6px">Casually glance around their property. If you spot something obvious, point to it.</div><div style="font-size:10px;color:#f59e0b;background:#1a1000;border-radius:5px;padding:5px 8px">Once they answer, go straight to the matching service branch below. Their answer is your roadmap.</div>'},
+    {id:'s3', title:'Step 3 - Service Branches', color:'#f59e0b', html:'<div style="font-size:10px;color:#555;margin-bottom:10px">Use the branch that matches what they said they need.</div><div style="font-size:10px;font-weight:700;color:#f59e0b;margin-bottom:4px">1. House Washing</div><div style="font-size:11px;color:#ccc;line-height:1.7;background:#111;border-radius:6px;padding:8px 10px;border-left:2px solid rgba(245,158,11,.3);margin-bottom:6px">Perfect - that's actually what we've been doing all week on your street. We do a soft wash which is way more effective than a regular pressure washer on siding - it gets into the pores and kills the mold and mildew at the root so it stays clean way longer. For a home your size with the group rate we're looking at about $[price]. You don't even need to be home - we text you before and after with photos.</div><div style="font-size:10px;color:#22c55e;background:#0a1a0a;border-radius:5px;padding:5px 8px;border-left:2px solid rgba(34,197,94,.25);margin-bottom:12px">Bundle: While the crew is up on the house anyway - when did you last have the gutters cleared? I can bundle that in and you save yourself a separate call later.</div><div style="font-size:10px;font-weight:700;color:#f59e0b;margin-bottom:4px">2. Gutter Cleaning</div><div style="font-size:11px;color:#ccc;line-height:1.7;background:#111;border-radius:6px;padding:8px 10px;border-left:2px solid rgba(245,158,11,.3);margin-bottom:6px">Yeah gutters are one of those things that are easy to forget until they start causing real problems - once they overflow it backs up under the roofline and into the fascia boards. Expensive fix. We go up, completely clear everything out, flush the downspouts, and rinse the roofline. For a home your size with the group rate we're at about $[price]. Takes about an hour.</div><div style="font-size:10px;color:#22c55e;background:#0a1a0a;border-radius:5px;padding:5px 8px;border-left:2px solid rgba(34,197,94,.25);margin-bottom:12px">Bundle: Since the crew is already going to be up on ladders - is the exterior of the house something you'd want handled at the same time?</div><div style="font-size:10px;font-weight:700;color:#f59e0b;margin-bottom:4px">3. Window Cleaning</div><div style="font-size:11px;color:#ccc;line-height:1.7;background:#111;border-radius:6px;padding:8px 10px;border-left:2px solid rgba(245,158,11,.3);margin-bottom:6px">Windows make such a big difference - it changes how the whole house looks from the outside and how much light you get inside. We do full exterior cleaning, tracks, and screens. For hard water stains we have a treatment that removes the mineral buildup that regular cleaning can't touch. For a home your size we're at about $[price] with the group rate.</div><div style="font-size:10px;color:#22c55e;background:#0a1a0a;border-radius:5px;padding:5px 8px;border-left:2px solid rgba(34,197,94,.25);margin-bottom:12px">Bundle: If you have solar panels - dirty windows and dirty panels are basically the same problem. Do you have solar?</div><div style="font-size:10px;font-weight:700;color:#f59e0b;margin-bottom:4px">4. Solar Panel Cleaning</div><div style="font-size:11px;color:#ccc;line-height:1.7;background:#111;border-radius:6px;padding:8px 10px;border-left:2px solid rgba(245,158,11,.3);margin-bottom:6px">Solar panels lose 15-25% of their efficiency when they get dirty. Most people don't realize how much it's actually affecting their energy bill. We use a deionized water system that won't scratch the panels or void your warranty. For a typical residential system with the group rate it's about $[price].</div><div style="font-size:10px;color:#22c55e;background:#0a1a0a;border-radius:5px;padding:5px 8px;border-left:2px solid rgba(34,197,94,.25);margin-bottom:12px">Bundle: While we're up on the roof area - are the gutters something that needs attention too?</div><div style="font-size:10px;font-weight:700;color:#f59e0b;margin-bottom:4px">5. Pressure Washing</div><div style="font-size:11px;color:#ccc;line-height:1.7;background:#111;border-radius:6px;padding:8px 10px;border-left:2px solid rgba(245,158,11,.3);margin-bottom:6px">Yeah the driveway and concrete are something people notice a lot. We do a hot water pressure wash that gets deep into the pores of the concrete and lifts the staining and oil out. For a standard driveway with the group rate we're looking at $[price].</div><div style="font-size:10px;color:#22c55e;background:#0a1a0a;border-radius:5px;padding:5px 8px;border-left:2px solid rgba(34,197,94,.25);margin-bottom:12px">Bundle: And if the house exterior is something you've been thinking about too - soft washing the house and doing the driveway together is a really popular combo.</div><div style="font-size:10px;font-weight:700;color:#f59e0b;margin-bottom:4px">6. Roof Cleaning</div><div style="font-size:11px;color:#ccc;line-height:1.7;background:#111;border-radius:6px;padding:8px 10px;border-left:2px solid rgba(245,158,11,.3);margin-bottom:6px">Those black streaks are actually a bacteria called gloeocapsa magma - it feeds on the limestone in your shingles and spreads over time. Left alone it shortens the life of your roof by years. We do a low pressure soft wash treatment that kills it at the root. Results last 2-3 years. For a home your size with the group rate we're looking at $[price].</div><div style="font-size:10px;color:#22c55e;background:#0a1a0a;border-radius:5px;padding:5px 8px;border-left:2px solid rgba(34,197,94,.25)">Bundle: While we're up there - the gutters are worth checking too. I can bundle that in and the crew handles both in one visit.</div>'},
+    {id:'s4', title:'Step 4 - The Close', color:'#22c55e', html:'<div style="font-size:11px;color:#ccc;line-height:1.7;background:#111;border-radius:6px;padding:8px 10px;border-left:2px solid rgba(34,197,94,.3);margin-bottom:8px">So did you want to go ahead and get that locked in? I can get you on the schedule for this week while we're already in the neighborhood. What works better - tomorrow or later in the week?</div><div style="font-size:10px;color:#555;background:#0e0e0e;border-radius:5px;padding:5px 8px;border-left:2px solid #333;margin-bottom:10px">Plant your feet. Hold eye contact. The silence after this question is part of the close - do not fill it. First person to speak loses.</div><div style="font-size:10px;font-weight:700;color:#22c55e;margin-bottom:4px">If they hesitate on the bundle</div><div style="font-size:11px;color:#ccc;line-height:1.7;background:#111;border-radius:6px;padding:8px 10px;border-left:2px solid rgba(34,197,94,.3);margin-bottom:6px">Totally fine - even if you just want to start with the [primary service] today and we come back for the rest, that works too. Want to at least lock in the [primary service] while the group rate is available?</div><div style="font-size:10px;color:#f59e0b;background:#1a1000;border-radius:5px;padding:5px 8px">One service booked is infinitely better than zero. Never leave empty-handed if there is any interest at all.</div>'},
+    {id:'s5', title:'Step 5 - Smokescreen Objections', color:'#f43f5e', html:'<div style="font-size:10px;color:#555;margin-bottom:10px;line-height:1.5">A smokescreen is a polite way of saying no without saying no. Ask one more genuine question to find the real barrier.</div><div style="font-size:10px;color:#f43f5e;background:#1a0000;border-radius:5px;padding:6px 9px;margin-bottom:12px">Universal buster: "Hey - totally respect that. Can I ask honestly - is it a hard no or more of a not right now?"</div><div style="font-size:10px;font-weight:700;color:#f43f5e;margin-bottom:4px">"I need to think about it"</div><div style="font-size:11px;color:#ccc;line-height:1.7;background:#111;border-radius:6px;padding:8px 10px;border-left:2px solid rgba(244,63,94,.3);margin-bottom:6px">Totally get that. Can I ask - is it more about the timing, the price, or just not sure if you need it done right now? I want to make sure I answered everything before I leave.</div><div style="font-size:10px;color:#818cf8;background:#0a0a1a;border-radius:5px;padding:5px 8px;margin-bottom:12px">If price: "I hear you - the group rate is the best I can do while we're on your street. If it helps I can break it into two visits so it's not all at once."</div><div style="font-size:10px;font-weight:700;color:#f43f5e;margin-bottom:4px">"Send me some info"</div><div style="font-size:11px;color:#ccc;line-height:1.7;background:#111;border-radius:6px;padding:8px 10px;border-left:2px solid rgba(244,63,94,.3);margin-bottom:6px">Of course - what's the best number? I'll text you right now so you have it. And honestly the best way to see our work is the before and after photos - let me pull one up real quick.</div><div style="font-size:10px;color:#818cf8;background:#0a0a1a;border-radius:5px;padding:5px 8px;margin-bottom:12px">After photos: "Pretty dramatic right? That's a house two streets over. Is that the kind of result you'd want for yours?"</div><div style="font-size:10px;font-weight:700;color:#f43f5e;margin-bottom:4px">"I have to ask my spouse"</div><div style="font-size:11px;color:#ccc;line-height:1.7;background:#111;border-radius:6px;padding:8px 10px;border-left:2px solid rgba(244,63,94,.3);margin-bottom:6px">Absolutely makes sense. Is he/she home right now? I can take two minutes to walk you both through it. Or a lot of couples just do a quick text - want to shoot them a message right now while I'm here?</div><div style="font-size:10px;color:#818cf8;background:#0a0a1a;border-radius:5px;padding:5px 8px;margin-bottom:12px">If not home: "Let me text you the details right now so you can show them. When do you think you'd have a chance to chat about it?" Get a specific day and follow up exactly then.</div><div style="font-size:10px;font-weight:700;color:#f43f5e;margin-bottom:4px">"We already have someone"</div><div style="font-size:11px;color:#ccc;line-height:1.7;background:#111;border-radius:6px;padding:8px 10px;border-left:2px solid rgba(244,63,94,.3);margin-bottom:6px">Oh nice - who do you use? How have they been? Are you happy with them?</div><div style="font-size:10px;color:#818cf8;background:#0a0a1a;border-radius:5px;padding:5px 8px;margin-bottom:12px">If they hesitate: "A lot of our clients switched to us after having some inconsistency. We document everything with before and after photos and the owner personally follows up after each visit."</div><div style="font-size:10px;font-weight:700;color:#f43f5e;margin-bottom:4px">"Not right now / maybe later"</div><div style="font-size:11px;color:#ccc;line-height:1.7;background:#111;border-radius:6px;padding:8px 10px;border-left:2px solid rgba(244,63,94,.3);margin-bottom:6px">Totally understand - when do you think you'd want to get it done? Summer? Fall? I ask because our schedule fills up fast in peak season.</div><div style="font-size:10px;color:#818cf8;background:#0a0a1a;border-radius:5px;padding:5px 8px">If they give a timeframe: "Perfect - what if I reach out in [month]? I'll put you on our early booking list so you get priority scheduling. What's the best number?"</div>'},
+    {id:'s6', title:'Step 6 - After Every Door', color:'#818cf8', html:'<div style="font-size:10px;font-weight:700;color:#818cf8;margin-bottom:5px">If they book</div><div style="display:flex;flex-direction:column;gap:2px;margin-bottom:12px"><div style="font-size:11px;color:#aaa;line-height:1.6">+ Get name, number, best day and time</div><div style="font-size:11px;color:#aaa;line-height:1.6">+ Log in Jobber immediately - do not wait</div><div style="font-size:11px;color:#aaa;line-height:1.6">+ Confirm text to client within 5 minutes</div><div style="font-size:11px;color:#aaa;line-height:1.6">+ Knock the 4-5 nearest neighbors right now</div><div style="font-size:11px;color:#aaa;line-height:1.6">+ Tell manager so crew is scheduled</div></div><div style="font-size:10px;font-weight:700;color:#818cf8;margin-bottom:5px">If they don't book</div><div style="display:flex;flex-direction:column;gap:2px"><div style="font-size:11px;color:#aaa;line-height:1.6">+ Leave a business card - every single time</div><div style="font-size:11px;color:#aaa;line-height:1.6">+ If they gave a number - follow up in 2 days</div><div style="font-size:11px;color:#aaa;line-height:1.6">+ If they gave a timeframe - set a Jobber reminder</div><div style="font-size:11px;color:#aaa;line-height:1.6">+ Walk away cleanly - never linger or look defeated</div></div>'}
+  ];
+  
+  sections.forEach(function(sec) {
+    script_html += '<div class="collapsible" style="margin-bottom:8px">';
+    script_html += '<button class="coll-header" onclick="toggleSection(\'sec-'+sec.id+'\')" style="width:100%;background:#0f0f0f;border:1px solid #1a1a1a;border-radius:8px;padding:10px 14px;display:flex;justify-content:space-between;align-items:center;text-align:left;cursor:pointer">';
+    script_html += '<span style="font-size:11px;font-weight:700;color:'+sec.color+'">'+sec.title+'</span>';
+    script_html += '<span class="arrow" style="font-size:12px;color:#444"> v</span></button>';
+    script_html += '<div id="sec-'+sec.id+'" style="display:none;background:#0c0c0c;border:1px solid #161616;border-top:none;border-radius:0 0 8px 8px;padding:12px 14px">';
+    script_html += sec.html;
+    script_html += '</div></div>';
+  });
+  
+  document.getElementById('res-script').innerHTML = script_html;
 }
 
-function toggleColl(id) {
-  var body=document.getElementById(id+'b');
-  var arrow=document.getElementById(id+'a');
-  if(!body) return;
-  var open=body.style.display==='block';
-  body.style.display=open?'none':'block';
-  if(arrow) arrow.textContent=open?'v':'^';
-  var header=body.previousElementSibling;
-  if(header) { if(open) header.classList.remove('open'); else header.classList.add('open'); }
-}
-document.addEventListener('click',function(e){
-  var btn=e.target.closest('[data-coll]');
-  if(btn) toggleColl(btn.getAttribute('data-coll'));
-});
+
 
 // ── MANAGER ───────────────────────────────────────────────────────
 function renderManager() {
@@ -784,6 +825,7 @@ function toggleMgZone(id) {
 
 // ── INIT ──────────────────────────────────────────────────────────
 document.getElementById('pw-input').focus();
+buildResources();
 renderResources();
 </script>
 </body>
