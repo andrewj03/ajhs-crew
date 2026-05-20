@@ -141,8 +141,8 @@ button,input{font-family:'Courier New',monospace;cursor:pointer}
 </div>
 
 <script>
-var SUPA='https://xddvgkiqhchzbdvdulxt.supabase.co';
-var SKEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhkZHZna2lxaGNoemJkdmR1bHh0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkyMjY3ODMsImV4cCI6MjA5NDgwMjc4M30.Kbs2mOAKy7kKgxSJU4YgvxBMxbJh_TnBeJ4iUfsem2Q';
+var SUPA='https://uaehgpzismkmyotyjisb.supabase.co';
+var SKEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVhZWhncHppc21rbXlvdHlqaXNiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkzMTAwMjYsImV4cCI6MjA5NDg4NjAyNn0.85i4NbHXYN-3lgvCXwoEonnYJfBxHKKPc3z13Q-f7Kk';
 var PW='2003',PIN='1969';
 async function dbGet(k){try{var r=await fetch(SUPA+'/rest/v1/knock_data?key=eq.'+k+'&select=value',{headers:{apikey:SKEY,Authorization:'Bearer '+SKEY}});var d=await r.json();return(d&&d.length)?JSON.parse(d[0].value):null;}catch(e){return null;}}
 async function dbSet(k,v){try{await fetch(SUPA+'/rest/v1/knock_data',{method:'POST',headers:{apikey:SKEY,Authorization:'Bearer '+SKEY,'Content-Type':'application/json',Prefer:'resolution=merge-duplicates'},body:JSON.stringify({key:k,value:JSON.stringify(v),updated_at:new Date().toISOString()})});}catch(e){}}
