@@ -3,830 +3,253 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
-<meta name="apple-mobile-web-app-capable" content="yes"/>
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
-<title>AJ Home Services — D2D Crew Portal</title>
+<title>AJ Home Services</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 body{background:#080808;color:#e0e0e0;font-family:'Courier New',monospace;min-height:100vh;display:flex;flex-direction:column}
-button{font-family:'Courier New',monospace;cursor:pointer}
-input{font-family:'Courier New',monospace}
-::-webkit-scrollbar{width:0;height:0}
-.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.85);display:flex;align-items:center;justify-content:center;z-index:999}
-.modal{background:#111;border:1px solid #333;border-radius:12px;padding:28px 24px;width:290px;text-align:center}
-.modal h2{font-size:20px;font-weight:700;color:#fff;margin-bottom:4px}
-.modal p{font-size:11px;color:#555;margin-bottom:18px;line-height:1.6}
-.modal input{width:100%;background:#0e0e0e;border:1px solid #2a2a2a;border-radius:6px;color:#e0e0e0;padding:10px 12px;font-size:15px;font-family:'Courier New',monospace;outline:none;margin-bottom:10px;text-align:center;letter-spacing:.15em}
-.modal input.err{border-color:#ef4444}
-.err-msg{font-size:11px;color:#ef4444;margin-bottom:8px;margin-top:-4px}
-.btn-primary{width:100%;background:rgba(34,211,238,.1);border:1px solid rgba(34,211,238,.4);border-radius:6px;color:#22d3ee;padding:10px;font-size:13px;font-family:'Courier New',monospace;font-weight:700}
-.btn-row{display:flex;gap:8px}
-.btn-row button{flex:1;padding:9px;border-radius:6px;font-size:12px;font-family:'Courier New',monospace;font-weight:700}
-.btn-cancel{background:transparent;border:1px solid #333;color:#555}
-/* header */
-#header{background:#0e0e0e;padding:10px 14px;border-bottom:1px solid #1a1a1a;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;flex-shrink:0}
-#header .logo{font-size:15px;font-weight:700;color:#22d3ee}
-#header .sub{font-size:7px;color:#333;letter-spacing:.15em;text-transform:uppercase}
-#header .stats{font-size:8px;color:#2a2a2a}
-#header .stats span{color:#22c55e}
-.nav-tabs{display:flex;border:1px solid #1a1a1a;border-radius:6px;overflow:hidden}
-.nav-tabs button{padding:5px 10px;background:transparent;border:none;border-right:1px solid #1a1a1a;color:#333;font-size:11px;font-family:'Courier New',monospace}
-.nav-tabs button:last-child{border-right:none}
-.nav-tabs button.active{background:rgba(34,211,238,.1);color:#22d3ee;font-weight:700}
-.sync-bar{display:flex;gap:8px;align-items:center}
-.sync-bar span{font-size:8px;color:#333}
-.sync-bar span.ok{color:#22c55e}
-.sync-bar span.syncing{color:#f59e0b}
-.icon-btn{font-size:8px;color:#444;background:transparent;border:1px solid #1e1e1e;border-radius:4px;padding:2px 6px}
-/* zone tabs */
-#zone-tabs{display:flex;overflow-x:auto;background:#0a0a0a;border-bottom:1px solid #141414;scrollbar-width:none;flex-shrink:0}
-#zone-tabs::-webkit-scrollbar{display:none}
-#zone-tabs button{padding:8px 12px;background:transparent;border:none;border-bottom:2px solid transparent;color:#2e2e2e;font-size:9px;font-family:'Courier New',monospace;white-space:nowrap}
-#zone-tabs button.active{border-bottom-color:var(--zc);color:var(--zc);font-weight:700}
-/* zone meta */
-#zone-meta{padding:6px 14px;display:flex;gap:12px;flex-wrap:wrap;align-items:center;flex-shrink:0;border-bottom:1px solid #111}
-#zone-meta .meta-item{display:flex;gap:4px;align-items:center}
-#zone-meta .meta-label{font-size:7px;color:#333}
-#zone-meta .meta-val{font-size:10px;font-weight:700}
-#zone-meta .note{font-size:8px;color:#252525;flex:1;min-width:100px}
-/* field layout */
-#field-layout{display:flex;flex:1;overflow:hidden}
-#nb-sidebar{width:155px;min-width:155px;background:#090909;border-right:1px solid #111;overflow-y:auto;padding-top:4px}
-.nb-item{padding:8px 9px;cursor:pointer;border-left:2px solid transparent}
-.nb-item.active{border-left-color:var(--zc);background:rgba(0,0,0,.3)}
-.nb-item .nb-name{font-size:8px;line-height:1.3;color:#333}
-.nb-item.active .nb-name{color:#ddd;font-weight:700}
-.nb-item .nb-days{font-size:7px;color:#252525;margin-top:1px}
-.nb-item .nb-stat{font-size:7px;color:#282828;margin-top:1px}
-.nb-progress{margin-top:3px;height:2px;background:#151515;border-radius:1px}
-.nb-progress-fill{height:2px;border-radius:1px;background:rgba(255,255,255,.2)}
-.recent-label{margin:8px 8px 3px;font-size:7px;color:#1e1e1e;letter-spacing:.1em}
-.log-item{padding:3px 9px;border-bottom:1px solid #0c0c0c}
-.log-item .li-rep{font-size:7px;color:#282828}
-.log-item .li-street{font-size:6px;color:#1c1c1c;margin-top:1px}
-/* street list */
-#street-pane{flex:1;overflow-y:auto;padding:12px}
-.street-header{margin-bottom:10px}
-.street-header h3{font-size:12px;font-weight:700;color:#f0f0f0}
-.street-header .sh-meta{font-size:8px;color:#333;margin-top:2px}
-.street-hint{margin-top:5px;font-size:7px;color:#252525;background:#0c0c0c;border:1px solid #151515;border-radius:4px;padding:3px 7px;display:inline-block}
-.streets-list{display:flex;flex-direction:column;gap:3px;margin-top:8px}
-.street-row{border-radius:5px;border:1px solid #161616;background:#0d0d0d}
-.street-row.done{background:#0c190c;border-color:rgba(34,197,94,.1)}
-.street-row.skip{background:#190c0c;border-color:rgba(239,68,68,.1)}
-.street-row .sr-inner{display:flex;align-items:center;padding:6px 8px;gap:6px;cursor:pointer}
-.street-num{width:18px;height:18px;border-radius:3px;background:rgba(255,255,255,.05);display:flex;align-items:center;justify-content:center;font-size:7px;font-weight:700;flex-shrink:0}
-.street-name{flex:1;font-size:11px;font-weight:600;color:#bbb}
-.street-row.done .street-name{color:#255025}
-.street-row.skip .street-name{color:#502525;text-decoration:line-through}
-.added-badge{margin-left:5px;font-size:7px;color:#1a5a1a;background:#0a1a0a;border:1px solid #143a14;padding:1px 4px;border-radius:2px}
-.sr-btns{display:flex;gap:3px}
-.sr-btn{width:28px;height:28px;border-radius:4px;border:1px solid #1c1c1c;background:transparent;font-size:13px;display:flex;align-items:center;justify-content:center}
-.sr-btn.done-btn.active{border-color:#22c55e;background:rgba(34,197,94,.13);color:#22c55e}
-.sr-btn.skip-btn.active{border-color:#ef4444;background:rgba(239,68,68,.13);color:#ef4444}
-.sr-btn.del-btn{color:#252525;font-size:9px}
-.sr-detail{padding:4px 8px 8px 32px;border-top:1px solid #111;font-size:8px;color:#2a2a2a;line-height:1.9}
-.add-street{display:flex;gap:7px;margin-top:12px}
-.add-street input{flex:1;background:#0d0d0d;border:1px solid #1c1c1c;border-radius:5px;color:#777;padding:7px 8px;font-size:10px;font-family:'Courier New',monospace;outline:none}
-.add-street button{padding:7px 11px;border-radius:5px;font-size:10px;font-family:'Courier New',monospace;font-weight:700}
-/* bottom bar */
-#bottom-bar{background:#090909;border-top:1px solid #111;padding:6px 14px;display:flex;align-items:center;gap:10px;flex-shrink:0}
-#bottom-bar .bb-bar{flex:1;height:3px;background:#141414;border-radius:2px}
-#bottom-bar .bb-fill{height:3px;border-radius:2px;transition:width .3s}
-#bottom-bar .bb-stat{font-size:8px;color:#3a3a3a;font-weight:700;white-space:nowrap}
-/* resources */
-#resources{flex:1;overflow-y:auto;display:flex;flex-direction:column}
-.res-tabs{display:flex;background:#0a0a0a;border-bottom:1px solid #141414;flex-shrink:0}
-.res-tabs button{flex:1;padding:10px;background:transparent;border:none;border-bottom:2px solid transparent;color:#333;font-size:10px;font-family:'Courier New',monospace}
-.res-tabs button.active{border-bottom-color:#22d3ee;color:#22d3ee;font-weight:700}
-.res-content{flex:1;overflow-y:auto;padding:12px 14px}
-.golden-rule{background:#1a1000;border:1px solid rgba(245,158,11,.25);border-radius:8px;padding:10px 14px;margin-bottom:14px}
-.golden-rule .gr-title{font-size:10px;font-weight:700;color:#f59e0b;margin-bottom:4px}
-.golden-rule .gr-body{font-size:11px;color:#c47d0a;line-height:1.5}
-.collapsible{margin-bottom:8px}
-.coll-header{width:100%;background:#0f0f0f;border:1px solid #1a1a1a;border-radius:8px;padding:10px 14px;display:flex;justify-content:space-between;align-items:center;text-align:left}
-.coll-header.open{border-radius:8px 8px 0 0;border-bottom-color:transparent}
-.coll-header .ch-title{font-size:11px;font-weight:700;color:#bbb}
-.coll-header .ch-arrow{font-size:12px;color:#444}
-.coll-body{background:#0c0c0c;border:1px solid #161616;border-top:none;border-radius:0 0 8px 8px;padding:10px 14px}
-/* pricing table */
-.price-table{width:100%;border-collapse:collapse;margin:8px 0}
-.price-table .th{font-size:8px;color:#444;letter-spacing:.1em;padding:3px 0;border-bottom:1px solid #1a1a1a}
-.price-table td{padding:5px 0;border-bottom:1px solid #111;font-size:10px;vertical-align:top}
-.price-table .td-size{color:#aaa;width:35%}
-.price-table .td-price{font-weight:700;width:30%}
-.price-table .td-note{color:#555;font-size:9px}
-.price-extra{margin-top:8px;font-size:10px;color:#555;background:#111;border-radius:5px;padding:7px 10px;line-height:1.6;border-left:2px solid rgba(255,255,255,.1)}
-/* script */
-.script-block{margin-bottom:6px}
-.script-quote{font-size:11px;color:#ccc;line-height:1.7;background:#111;border-radius:6px;padding:8px 10px;border-left:2px solid rgba(255,255,255,.15)}
-.script-cue{margin-top:5px;font-size:10px;color:#555;background:#0e0e0e;border-radius:5px;padding:5px 8px;border-left:2px solid #333;line-height:1.5}
-.script-note{margin-top:5px;font-size:10px;color:#f59e0b;background:#1a1000;border-radius:5px;padding:5px 8px;line-height:1.5}
-.script-bundle{margin-top:5px;font-size:10px;color:#22c55e;background:#0a1a0a;border-radius:5px;padding:5px 8px;border-left:2px solid rgba(34,197,94,.25);line-height:1.5}
-.script-follow{margin-top:5px;font-size:10px;color:#818cf8;background:#0a0a1a;border-radius:5px;padding:5px 8px;line-height:1.5}
-.script-heading{font-size:10px;font-weight:700;margin-bottom:5px;letter-spacing:.05em}
-.bullet-list{display:flex;flex-direction:column;gap:2px}
-.bullet-list div{font-size:11px;color:#aaa;line-height:1.6}
-/* bundle */
-.bundle-tier{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #141414}
-.bundle-tier .bt-label{font-size:10px;color:#888}
-.bundle-tier .bt-val{font-size:10px;font-weight:700;color:#f59e0b}
-.do-dont{display:flex;gap:10px;margin-top:12px}
-.do-dont .col{flex:1}
-.do-dont .col-title{font-size:9px;font-weight:700;margin-bottom:5px}
-.do-dont .col-item{font-size:9px;line-height:1.7}
-/* manager */
-#manager{flex:1;overflow-y:auto;padding:14px}
-.mgr-card{background:#0f0f0f;border:1px solid #1a1a1a;border-radius:10px;padding:14px 16px;margin-bottom:12px}
-.mgr-card .mc-label{font-size:9px;color:#444;letter-spacing:.12em;margin-bottom:8px}
-.overall-pct{font-size:30px;font-weight:700;color:#fff;line-height:1}
-.overall-pct span{font-size:14px;color:#444}
-.overall-sub{font-size:9px;color:#444;margin-top:3px}
-.stat-row{display:flex;gap:12px;flex-wrap:wrap}
-.stat-item{text-align:center}
-.stat-item .si-val{font-size:18px;font-weight:700}
-.stat-item .si-label{font-size:7px;color:#333;letter-spacing:.1em}
-.overall-bar{margin-top:10px;height:5px;background:#1a1a1a;border-radius:3px}
-.overall-bar-fill{height:5px;border-radius:3px;background:linear-gradient(90deg,#22d3ee,#22c55e);transition:width .5s}
-.rep-row{display:flex;align-items:center;gap:8px;margin-bottom:6px}
-.rep-rank{width:18px;font-size:9px;color:#333;font-weight:700}
-.rep-name{width:65px;font-size:10px;font-weight:700;color:#ccc}
-.rep-bar-wrap{flex:1;height:18px;background:#141414;border-radius:3px;overflow:hidden;position:relative}
-.rep-bar-fill{height:100%;background:rgba(34,197,94,.1)}
-.rep-bar-label{position:absolute;inset:0;display:flex;align-items:center;padding-left:6px;gap:6px}
-.rep-bar-label .rbl-done{font-size:8px;color:#22c55e;font-weight:700}
-.rep-bar-label .rbl-skip{font-size:8px;color:#ef4444}
-.rep-meta{font-size:7px;color:#252525;text-align:right;min-width:70px}
-.zone-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:8px;margin-bottom:12px}
-.zone-card{background:#0f0f0f;border:1px solid #1a1a1a;border-radius:8px;padding:12px 14px;cursor:pointer}
-.zone-card.active{border-color:rgba(255,255,255,.2)}
-.zc-header{display:flex;justify-content:space-between;align-items:flex-start}
-.zc-name{font-size:12px;font-weight:700}
-.zc-sub{font-size:7px;color:#333}
-.zc-pct{font-size:20px;font-weight:700;color:#fff;line-height:1}
-.zc-pct span{font-size:9px;color:#444}
-.zc-stats{display:flex;gap:12px;margin-top:8px}
-.zc-stat .zcs-val{font-size:13px;font-weight:700}
-.zc-stat .zcs-label{font-size:7px;color:#252525}
-.zc-bar{margin-top:6px;height:3px;background:#1a1a1a;border-radius:2px}
-.zc-bar-fill{height:3px;border-radius:2px;transition:width .4s}
-.nb-breakdown{margin-top:10px;border-top:1px solid #1c1c1c;padding-top:8px;display:flex;flex-direction:column;gap:5px}
-.nbb-row .nbb-header{display:flex;justify-content:space-between}
-.nbb-row .nbb-name{font-size:8px;color:#555;flex:1;padding-right:8px}
-.nbb-row .nbb-pct{font-size:8px;font-weight:700;color:#333}
-.nbb-bar{margin-top:2px;height:2px;background:#161616;border-radius:1px}
-.nbb-bar-fill{height:2px;border-radius:1px}
-.nbb-stat{font-size:7px;color:#252525;margin-top:1px}
-.log-table{display:flex;flex-direction:column;max-height:280px;overflow-y:auto}
-.lt-row{display:flex;gap:8px;align-items:center;padding:3px 0;border-bottom:1px solid #0e0e0e}
-.lt-time{font-size:7px;color:#222;min-width:65px}
-.lt-rep{font-size:8px;font-weight:700;color:#666;min-width:50px}
-.lt-action{font-size:7px;font-weight:700;min-width:38px}
-.lt-street{font-size:8px;color:#333;flex:1}
-.lt-zone{font-size:7px}
+button,input{font-family:'Courier New',monospace;cursor:pointer}
+::-webkit-scrollbar{display:none}
+.mbg{position:fixed;inset:0;background:rgba(0,0,0,.87);display:flex;align-items:center;justify-content:center;z-index:999}
+.mbox{background:#111;border:1px solid #333;border-radius:12px;padding:28px 24px;width:290px;text-align:center}
+.bc{width:100%;background:rgba(34,211,238,.1);border:1px solid rgba(34,211,238,.4);border-radius:6px;color:#22d3ee;padding:10px;font-size:13px;font-weight:700}
+.mi{width:100%;background:#0e0e0e;border:1px solid #2a2a2a;border-radius:6px;color:#e0e0e0;padding:10px 12px;font-size:15px;outline:none;margin-bottom:10px;text-align:center}
+.er{color:#ef4444;font-size:11px;margin-bottom:8px}
+#hdr{background:#0e0e0e;padding:10px 14px;border-bottom:1px solid #1a1a1a;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;flex-shrink:0}
+.nt{display:flex;border:1px solid #1a1a1a;border-radius:6px;overflow:hidden}
+.nt button{padding:5px 10px;background:transparent;border:none;border-right:1px solid #1a1a1a;color:#333;font-size:11px}
+.nt button:last-child{border-right:none}
+.nt button.on{background:rgba(34,211,238,.1);color:#22d3ee;font-weight:700}
+#zt{display:flex;overflow-x:auto;background:#0a0a0a;border-bottom:1px solid #141414;flex-shrink:0}
+#zt button{padding:8px 12px;background:transparent;border:none;border-bottom:2px solid transparent;color:#2e2e2e;font-size:9px;white-space:nowrap}
+#zm{padding:6px 14px;display:flex;gap:12px;flex-wrap:wrap;align-items:center;flex-shrink:0;border-bottom:1px solid #111;font-size:8px}
+#fl{display:flex;flex:1;overflow:hidden}
+#side{width:155px;min-width:155px;background:#090909;border-right:1px solid #111;overflow-y:auto;padding-top:4px}
+.nbi{padding:8px 9px;cursor:pointer;border-left:2px solid transparent}
+.nbi.on{border-left-color:var(--c)}
+.nbi-n{font-size:8px;line-height:1.3;color:#333}
+.nbi.on .nbi-n{color:#ddd;font-weight:700}
+.nbi-d{font-size:7px;color:#252525;margin-top:1px}
+.nbi-s{font-size:7px;color:#282828;margin-top:1px}
+#pane{flex:1;overflow-y:auto;padding:12px}
+.sl{display:flex;flex-direction:column;gap:3px;margin-top:8px}
+.sr{border-radius:5px;border:1px solid #161616;background:#0d0d0d}
+.sr.dn{background:#0c190c;border-color:rgba(34,197,94,.1)}
+.sr.sk{background:#190c0c;border-color:rgba(239,68,68,.1)}
+.sri{display:flex;align-items:center;padding:6px 8px;gap:6px;cursor:pointer}
+.srn{width:18px;height:18px;border-radius:3px;background:rgba(255,255,255,.04);display:flex;align-items:center;justify-content:center;font-size:7px;font-weight:700;flex-shrink:0}
+.srs{flex:1;font-size:11px;font-weight:600;color:#bbb}
+.sr.dn .srs{color:#255025}
+.sr.sk .srs{color:#502525;text-decoration:line-through}
+.srbr{display:flex;gap:3px}
+.srb{width:28px;height:28px;border-radius:4px;border:1px solid #1c1c1c;background:transparent;font-size:12px;color:#252525}
+.srb.don.on{border-color:#22c55e;background:rgba(34,197,94,.13);color:#22c55e}
+.srb.ski.on{border-color:#ef4444;background:rgba(239,68,68,.13);color:#ef4444}
+.ar{display:flex;gap:7px;margin-top:12px}
+.ai{flex:1;background:#0d0d0d;border:1px solid #1c1c1c;border-radius:5px;color:#777;padding:7px 8px;font-size:10px;outline:none}
+#bb{background:#090909;border-top:1px solid #111;padding:6px 14px;display:flex;align-items:center;gap:10px;flex-shrink:0}
+.bt{flex:1;height:3px;background:#141414;border-radius:2px}
+.bf{height:3px;border-radius:2px}
+.rt{display:flex;background:#0a0a0a;border-bottom:1px solid #141414;flex-shrink:0}
+.rt button{flex:1;padding:10px;background:transparent;border:none;border-bottom:2px solid transparent;color:#333;font-size:10px}
+.rt button.on{border-bottom-color:#22d3ee;color:#22d3ee;font-weight:700}
+.rb{flex:1;overflow-y:auto;padding:12px 14px}
+.coll{margin-bottom:8px}
+.cb{width:100%;background:#0f0f0f;border:1px solid #1a1a1a;border-radius:8px;padding:10px 14px;display:flex;justify-content:space-between;align-items:center;text-align:left;font-size:11px;font-weight:700}
+.cbd{display:none;background:#0c0c0c;border:1px solid #161616;border-top:none;border-radius:0 0 8px 8px;padding:10px 14px}
+.gold{background:#1a1000;border:1px solid rgba(245,158,11,.25);border-radius:8px;padding:10px 14px;margin-bottom:14px;font-size:11px;color:#c47d0a;line-height:1.5}
+.gold b{color:#f59e0b;display:block;margin-bottom:4px}
+.pt{width:100%;border-collapse:collapse;margin:6px 0}
+.pt th{font-size:8px;color:#444;padding:3px 4px;border-bottom:1px solid #1a1a1a;text-align:left}
+.pt td{padding:5px 4px;border-bottom:1px solid #111;font-size:10px;vertical-align:top}
+.pex{margin-top:8px;font-size:10px;color:#555;background:#111;border-radius:5px;padding:7px 10px;line-height:1.6;border-left:2px solid rgba(255,255,255,.08)}
+.sq{font-size:11px;color:#ccc;line-height:1.7;background:#111;border-radius:6px;padding:8px 10px;margin-bottom:6px;border-left:2px solid #333}
+.sc{font-size:10px;color:#555;background:#0e0e0e;border-radius:5px;padding:5px 8px;border-left:2px solid #2a2a2a;margin-bottom:5px;line-height:1.5}
+.sn{font-size:10px;color:#f59e0b;background:#1a1000;border-radius:5px;padding:5px 8px;margin-bottom:5px;line-height:1.5}
+.sbun{font-size:10px;color:#22c55e;background:#0a1a0a;border-radius:5px;padding:5px 8px;border-left:2px solid rgba(34,197,94,.2);margin-bottom:5px;line-height:1.5}
+.sfo{font-size:10px;color:#818cf8;background:#0a0a1a;border-radius:5px;padding:5px 8px;margin-bottom:5px;line-height:1.5}
+.sh4{font-size:10px;font-weight:700;margin:8px 0 5px}
+.sbul{font-size:11px;color:#aaa;line-height:1.6;margin-bottom:2px}
+#mgr{flex:1;overflow-y:auto;padding:14px}
+.mc{background:#0f0f0f;border:1px solid #1a1a1a;border-radius:10px;padding:14px 16px;margin-bottom:12px}
+.zg{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:8px;margin-bottom:12px}
+.zc{background:#0f0f0f;border:1px solid #1a1a1a;border-radius:8px;padding:12px 14px;cursor:pointer}
+.lw{display:flex;flex-direction:column;max-height:280px;overflow-y:auto}
+.lr{display:flex;gap:8px;align-items:center;padding:3px 0;border-bottom:1px solid #0e0e0e;font-size:8px}
 </style>
 </head>
 <body>
 
-<!-- LOGIN -->
-<div id="login-screen" class="modal-bg">
-  <div class="modal">
-    <div style="font-size:22px;font-weight:700;color:#22d3ee;margin-bottom:2px;letter-spacing:-.02em">AJ Home Services</div>
-    <div style="font-size:9px;color:#444;letter-spacing:.15em;margin-bottom:22px">D2D CREW PORTAL</div>
-    <input type="password" id="pw-input" placeholder="Enter password" autocomplete="off"/>
-    <div id="pw-error" class="err-msg" style="display:none">Incorrect password</div>
-    <button class="btn-primary" onclick="checkPw()">Enter →</button>
-    <div style="font-size:9px;color:#2a2a2a;margin-top:14px">AJ Home Services · Summer 2026</div>
-  </div>
-</div>
+<div id="login" class="mbg">
+<div class="mbox">
+<div style="font-size:22px;font-weight:700;color:#22d3ee;margin-bottom:2px">AJ Home Services</div>
+<div style="font-size:9px;color:#444;letter-spacing:.15em;margin-bottom:22px">D2D CREW PORTAL</div>
+<input id="pw" class="mi" type="password" placeholder="Enter password"/>
+<div id="pwerr" class="er" style="display:none">Incorrect password</div>
+<button class="bc" id="pwbtn">Enter</button>
+</div></div>
 
-<!-- REP NAME MODAL -->
-<div id="rep-modal" class="modal-bg" style="display:none">
-  <div class="modal">
-    <div style="font-size:9px;color:#444;letter-spacing:.2em;margin-bottom:6px">AJ HOME SERVICES</div>
-    <h2>Who are you?</h2>
-    <p>Your name shows in the log so Andrew can see who knocked what.</p>
-    <input type="text" id="rep-input" placeholder="Your first name..."/>
-    <button class="btn-primary" onclick="saveRep()">Let's Go →</button>
-  </div>
-</div>
+<div id="repmod" class="mbg" style="display:none">
+<div class="mbox">
+<div style="font-size:20px;font-weight:700;color:#fff;margin-bottom:4px">Who are you?</div>
+<div style="font-size:10px;color:#555;margin-bottom:18px;line-height:1.6">Your name shows in the log.</div>
+<input id="repinp" class="mi" type="text" placeholder="Your first name..."/>
+<button class="bc" id="repbtn">Lets Go</button>
+</div></div>
 
-<!-- PIN MODAL -->
-<div id="pin-modal" class="modal-bg" style="display:none">
-  <div class="modal">
-    <div style="font-size:9px;color:#444;letter-spacing:.2em;margin-bottom:6px">MANAGER ACCESS</div>
-    <h2 style="font-size:18px">Enter PIN</h2>
-    <p>Manager view only.</p>
-    <input type="password" inputmode="numeric" id="pin-input" placeholder="••••" style="font-size:22px;letter-spacing:.3em"/>
-    <div id="pin-error" class="err-msg" style="display:none">Incorrect PIN</div>
-    <div class="btn-row">
-      <button class="btn-cancel" onclick="closePinModal()">Cancel</button>
-      <button class="btn-primary" style="flex:1;width:auto" onclick="checkPin()">Unlock</button>
-    </div>
-  </div>
-</div>
+<div id="pinmod" class="mbg" style="display:none">
+<div class="mbox">
+<div style="font-size:18px;font-weight:700;color:#fff;margin-bottom:4px">Enter PIN</div>
+<input id="pininp" class="mi" type="password" inputmode="numeric" style="font-size:22px;letter-spacing:.3em"/>
+<div id="pinerr" class="er" style="display:none">Incorrect PIN</div>
+<div style="display:flex;gap:8px">
+<button id="pincancel" style="flex:1;padding:9px;border-radius:6px;font-size:12px;background:transparent;border:1px solid #333;color:#555">Cancel</button>
+<button class="bc" id="pinbtn" style="flex:1;width:auto">Unlock</button>
+</div></div></div>
 
-<!-- MAIN APP (hidden until login) -->
 <div id="app" style="display:none;flex-direction:column;flex:1;min-height:100vh">
+<div id="hdr">
+<div>
+<div style="font-size:7px;color:#333;letter-spacing:.15em">AJ HOME SERVICES - SUMMER 2026</div>
+<div style="font-size:15px;font-weight:700;color:#22d3ee">D2D Crew Portal</div>
+<div style="font-size:8px;color:#2a2a2a" id="hstat">Loading</div>
+</div>
+<div style="display:flex;flex-direction:column;align-items:flex-end;gap:5px">
+<div class="nt">
+<button id="tf" class="on" data-view="field">Field</button>
+<button id="tr" data-view="resources">Info</button>
+<button id="tm" data-view="manager">Mgr</button>
+</div>
+<div style="display:flex;gap:8px;align-items:center">
+<span id="slbl" style="font-size:8px;color:#333">live</span>
+<button id="repchg" style="font-size:8px;color:#444;background:transparent;border:1px solid #1e1e1e;border-radius:4px;padding:2px 6px">You: <span id="rd"></span></button>
+<button id="refresh" style="font-size:8px;color:#444;background:transparent;border:1px solid #1e1e1e;border-radius:4px;padding:2px 6px">Refresh</button>
+</div></div></div>
 
-  <!-- HEADER -->
-  <div id="header">
-    <div>
-      <div class="sub">AJ Home Services · Summer 2026</div>
-      <div class="logo">D2D Crew Portal</div>
-      <div class="stats" id="hdr-stats">Loading...</div>
-    </div>
-    <div style="display:flex;flex-direction:column;align-items:flex-end;gap:5px">
-      <div class="nav-tabs">
-        <button id="tab-field" class="active" onclick="switchView('field')">🚪</button>
-        <button id="tab-resources" onclick="switchView('resources')">📋</button>
-        <button id="tab-manager" onclick="onManagerTab()">📊🔒</button>
-      </div>
-      <div class="sync-bar">
-        <span id="sync-status">●</span>
-        <button class="icon-btn" onclick="showRepModal()">👤 <span id="rep-display"></span></button>
-        <button class="icon-btn" onclick="loadData()">↻</button>
-      </div>
-    </div>
-  </div>
+<div id="vf" style="display:flex;flex-direction:column;flex:1;overflow:hidden">
+<div id="zt"></div><div id="zm"></div>
+<div id="fl"><div id="side"></div><div id="pane"></div></div>
+<div id="bb"><div class="bt"><div class="bf" id="bf"></div></div><div style="font-size:8px;color:#3a3a3a;font-weight:700;white-space:nowrap" id="bs"></div></div>
+</div>
 
-  <!-- FIELD VIEW -->
-  <div id="view-field" style="display:flex;flex-direction:column;flex:1;overflow:hidden">
-    <div id="zone-tabs"></div>
-    <div id="zone-meta"></div>
-    <div id="field-layout">
-      <div id="nb-sidebar"></div>
-      <div id="street-pane"></div>
-    </div>
-    <div id="bottom-bar">
-      <div class="bb-bar"><div class="bb-fill" id="bb-fill"></div></div>
-      <div class="bb-stat" id="bb-stat"></div>
-    </div>
-  </div>
+<div id="vr" style="display:none;flex-direction:column;flex:1;overflow:hidden">
+<div class="rt"><button id="rtp" class="on" data-rtab="pricing">Pricing</button><button id="rts" data-rtab="script">Script</button></div>
+<div id="rp" class="rb"></div>
+<div id="rs" class="rb" style="display:none"></div>
+</div>
 
-  <!-- RESOURCES VIEW -->
-  <div id="view-resources" style="display:none;flex-direction:column;flex:1;overflow:hidden">
-    <div id="resources">
-      <div class="res-tabs">
-        <button id="res-tab-pricing" class="active" onclick="switchResTab('pricing')">💰 Pricing</button>
-        <button id="res-tab-script" onclick="switchResTab('script')">📝 Script</button>
-      </div>
-      <div class="res-content" id="res-pricing"></div>
-      <div class="res-content" id="res-script" style="display:none"></div>
-    </div>
-  </div>
-
-  <!-- MANAGER VIEW -->
-  <div id="view-manager" style="display:none;flex:1;overflow-y:auto">
-    <div id="manager"></div>
-  </div>
-
+<div id="vm" style="display:none;flex:1;overflow-y:auto"><div id="mgr"></div></div>
 </div>
 
 <script>
-// ── CONFIG ────────────────────────────────────────────────────────
-const SUPA_URL = 'https://xddvgkiqhchzbdvdulxt.supabase.co';
-const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhkZHZna2lxaGNoemJkdmR1bHh0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkyMjY3ODMsImV4cCI6MjA5NDgwMjc4M30.Kbs2mOAKy7kKgxSJU4YgvxBMxbJh_TnBeJ4iUfsem2Q';
-const APP_PW  = '2003';
-const MGR_PIN = '1969';
+var SUPA='https://xddvgkiqhchzbdvdulxt.supabase.co';
+var SKEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhkZHZna2lxaGNoemJkdmR1bHh0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkyMjY3ODMsImV4cCI6MjA5NDgwMjc4M30.Kbs2mOAKy7kKgxSJU4YgvxBMxbJh_TnBeJ4iUfsem2Q';
+var PW='2003',PIN='1969';
+async function dbGet(k){try{var r=await fetch(SUPA+'/rest/v1/knock_data?key=eq.'+k+'&select=value',{headers:{apikey:SKEY,Authorization:'Bearer '+SKEY}});var d=await r.json();return(d&&d.length)?JSON.parse(d[0].value):null;}catch(e){return null;}}
+async function dbSet(k,v){try{await fetch(SUPA+'/rest/v1/knock_data',{method:'POST',headers:{apikey:SKEY,Authorization:'Bearer '+SKEY,'Content-Type':'application/json',Prefer:'resolution=merge-duplicates'},body:JSON.stringify({key:k,value:JSON.stringify(v),updated_at:new Date().toISOString()})});}catch(e){}}
+var ST={status:{},extra:{},log:[]};
+var repName=localStorage.getItem('ajhs_rep9')||'';
+var pinOk=false,zi=0,ni=0,expK=null,saveTmr=null;
+var ZONES=[{"id": "moraga", "name": "Moraga", "color": "#22d3ee", "tier": "A", "avg": "$1.4M", "wk": "1-2", "note": "HQ zone near St Marys. Rheem Valley highest density.", "nbs": [{"name": "Zone 1 - Campolindo", "days": "Mon-Wed Wk1", "streets": ["Betlin Pl", "Blumert Pl", "Buckingham Dr", "Calle La Mesa", "Calle La Montana", "Camelford Ct", "Campolindo Ct", "Campolindo Dr", "Corte Aires", "Corte Amigos", "Corte Annette", "Corte Azul", "Corte De Oro", "Corte De Rosas", "Corte Del Caballo", "Corte Del Campo", "Corte Del Sol", "Corte Encina", "Corte Fortuna", "Corte Fresca", "Corte Granada", "Corte La Rado", "Corte Mateo", "Corte Monterey", "Corte Pinon", "Corte Pinto", "Corte Royal", "Corte Santa Clara", "Corte Yolanda", "Lenelle Dr", "Lucia Ln", "Natalie Dr", "Paseo Del Campo", "Paseo Del Rio", "Paseo Grande", "Quintas Ln", "Sky-Hy Dr", "Via Granada", "Wimpole St", "Woodford Dr"]}, {"name": "Zone 2 - Donald/Ascot", "days": "Thu-Sat Wk1", "streets": ["Ascot Ct", "Ascot Dr", "Ascot Pl", "Devin Dr", "Donald Dr", "El Paraiso Ct", "Harold Dr", "Kimberley Dr", "La Salle Dr", "Scofield Dr"]}, {"name": "Zone 3 - Larch/School St", "days": "Mon-Wed Wk2", "streets": ["Alderbrook Pl", "Beford Pl", "Belfair Pl", "Birchwood Dr", "Birkdale Pl", "Carroll Dr", "Chalda Way", "Claudia Ct", "Derby Ln", "Draeger Dr", "Fernwood Dr", "Haven Ct", "Kent Ct", "Kings Crown Ct", "Kingsford Dr", "Lambeth Square", "Longfield Pl", "Lucas Dr", "Netherton Ct", "Newberry Pl", "Paseo Linares", "Redwing Pl", "Stafford Dr", "Turk Dr", "Williams Dr", "Willow Spring Ct", "Willow Spring Ln"]}, {"name": "Zone 4 - Camino Pablo", "days": "Thu Wk2", "streets": ["Archer Cir", "Arroyo Dr", "Ashbrook Pl", "Ashford Pl", "Camino Ricardo", "Corliss Dr", "Crossbrook Dr", "Danefield Pl", "Fieldbrook Pl", "Greenfield Dr", "Hardie Dr", "Idlewood Ct", "Ivy Pl", "Lynwood Pl", "Moraga Valley Ln", "Saint Andrews Dr", "Sullivan Dr", "Thorndale Pl", "Wakefield Dr", "Warfield Dr", "Winslow Pl", "Woodside Dr", "York Pl"]}, {"name": "Zone 5 - St Marys", "days": "Fri-Sat Wk2", "streets": ["Allen Ct", "Alta Mesa", "Bollinger Canyon Rd", "Breck Ct", "Camino Peral", "Carter Dr", "David Dr", "Del Monte Ct", "Del Monte Way", "Del Rio Ct", "Del Rio Way", "Jean Ct", "Joseph Dr", "Kippy Ct", "Russell Dr", "San Pablo Ct", "Santa Catalina Ct", "Wickham Dr"]}, {"name": "Zone 6 - Country Club", "days": "Mon-Wed Wk2", "streets": ["Agusta Dr", "Carr Dr", "Constance Pl", "Cortes Ct", "Country Club Dr", "Cypress Pt Way", "De La Cruz Way", "Fleuti Dr", "Glen Alpine", "Gloria Ct", "Hazelwood Pl", "Hetfield Pl", "Inverleith Ter", "Kingston Ct", "Lance Ct", "Rick Ct", "Sandringham North", "Sandringham South", "Saint Andrews Dr", "Sanders Dr", "School St", "Sheila Ct", "Sherwood Ct", "Silvia Ct", "Southard Ct", "Viader Dr", "Wandel Dr"]}, {"name": "Zone 7 - Rheem Valley", "days": "Thu-Sat Wk2", "streets": ["Amberwood Ct", "Baitx Dr", "Blaine Cir", "Brookfield Dr", "Butterfield Pl", "Camino Pablo", "Canning Ct", "Cedarwood Dr", "Deerfield Dr", "Dickenson Dr", "Eileen Ct", "El Camino Flores", "Fairfield Pl", "Freitas Dr", "Gaywood Pl", "Hammond Pl", "Hodges Dr", "Huff Ct", "Juniper Way", "Kazar Ct", "Ketelsen Dr", "Knoll Dr", "Lakefield Pl", "Larch Ave", "Louise Ct", "Lynch Ct", "Marie Pl", "Mayfield Pl", "Millfield Pl", "Oxford Dr", "Pembrook Ct", "Pimental Ct", "Redfield Pl", "Rimer Dr", "Roberts Ct", "Ross Dr", "Sarah Ln", "Selborne Way", "Shuey Dr", "Sparrow Ct", "Springfield Pl", "Stonefield Pl", "Tharp Dr", "Thune Ave", "Tia Pl", "Trinity Ter", "Vista Encinos", "Walford Dr", "Whitethorne Dr"]}]}, {"id": "danville", "name": "Danville", "color": "#f59e0b", "tier": "A", "avg": "$2.0M", "wk": "3-4", "note": "Greenbrook ~800 homes. Sycamore Valley family dense.", "nbs": [{"name": "Greenbrook", "days": "Mon-Wed Wk3", "streets": ["Greenbrook Dr", "Fircrest Ln", "Sherburne Hills Rd", "Tice Valley Blvd", "El Pintado Rd", "Meadow Dr", "Ridgewood Rd", "El Capitan Dr", "Greenbrook Ct", "Los Arabis Dr", "Greenwood Dr", "Laurel Dr", "Valley Oak Dr", "Sequoia Ct", "Sycamore Ct", "Oakwood Ct", "Wildwood Dr", "Arbolado Dr", "Garden Creek Pl", "Northbrook Ct", "Southbrook Ct", "Hillcrest Dr", "Meadow Ct", "Wood Creek Rd", "Rolling Hills Dr", "Creekside Dr", "Greenfield Rd", "Brookview Dr"]}, {"name": "Sycamore Valley", "days": "Thu-Sat Wk3", "streets": ["Sycamore Valley Rd", "Holbrook Dr", "Fostoria Way", "Dansborough Dr", "Sycamore Creek Way", "Sycamore Hills Ct", "Camino Tassajara", "Belleau Ct", "Sundance Ct", "Palomino Dr", "Stallion Ct", "Quarterhorse Ln", "Clydesdale Ct", "Mustang Ct", "Pinto Ct", "Appaloosa Ct", "Arabella Ct", "Remington Ct", "San Ramon Valley Dr", "Tassajara Ridge Rd", "Crow Canyon Rd", "Del Amigo Rd"]}, {"name": "Westside Danville", "days": "Mon-Wed Wk4", "streets": ["La Gonda Way", "El Cerro Blvd", "Prospect Ave", "Linda Mesa Ave", "Brookside Dr", "Laurenita Way", "Harlan Dr", "Montair Dr", "Cameo Acres Dr", "Oak Hill Rd", "Hartz Ave", "Railroad Ave", "Front St", "Church St", "School St", "San Ramon Valley Blvd", "Camino Ramon", "Love Ln", "Meadowlark Ln", "Paraiso Dr", "Sonora Ave", "Santiago Ln", "Starview Dr", "Marian Ln", "Quinterra Ln", "Acalanes Rd", "Camino Amigo", "Robyn Dr", "Tunbridge Rd", "Willowview Ct", "Sweetpea Ct", "Richard Ln", "Tamarind Ln"]}, {"name": "Diablo Rd", "days": "Thu-Sat Wk4", "streets": ["Diablo Rd", "Stone Valley Rd", "Crow Canyon Rd", "Lawrence Rd", "Green Valley Rd", "Camille Ave", "Alameda Diablo", "Danville Blvd", "Clipper Hill Rd", "Oakgate Dr", "Entrada Verde", "Franke Ln", "Wilder Rd", "Ackerman Dr", "Adagio Dr", "Alexander Ln", "Elati Ct", "Montoya Way", "Parkhaven Dr", "Rassani Dr", "Leafield Rd", "Brumby St", "Charolais Ct", "Tobiano Ct", "Brooktree Dr", "Carmenera St"]}]}, {"id": "alamo", "name": "Alamo", "color": "#a78bfa", "tier": "A", "avg": "$2.5M", "wk": "5-6", "note": "Highest avg ticket. Roundhill CC crown jewel.", "nbs": [{"name": "Roundhill CC", "days": "Mon-Wed Wk5", "streets": ["Roundhill Dr", "Roundhill Rd", "Royal Oaks Dr", "Royal Oaks Ct", "Royal Ridge Ct", "Windsor Green Dr", "Windsor Ct", "Windsor Pl", "Regina Dr", "Ridgemont Dr", "Barclay Ct", "Barrington Ln", "Abington Ln", "Adrienne Dr", "Alamo Country Cir", "Alamo Glen Dr", "Alamo Glen Ct", "Alamo Hills Dr", "Alamo Hills Ct", "Alamo Oaks Ln", "Alta Sierra Pl", "Amanda Ct", "Amber Pl", "Amy Way", "Alamo Sq", "Alamo View Pl", "Alamo Way", "Angela Ave", "Arbor Ln", "Anderson Ranch Ct", "Bando Ct", "Biltmore Dr", "Biltmore Ct", "Bevmar Ln", "Bernie Ln", "Austin Ln", "Avalon Ct", "Ashford Ct"]}, {"name": "Stone Valley", "days": "Thu-Sat Wk5", "streets": ["Stone Valley Rd", "Stone Valley Oaks Dr", "Stone Hill Dr", "Stone Creek Pl", "Stonegate Dr", "Stonegate Ct", "Stonegate Ln", "Stonecastle Dr", "White Gate Rd", "Livorna Rd", "Stone Valley Rd West", "Stone Valley Way", "Sandstone Rd", "Sandstone Ct", "Sugar Creek Ln", "Sugar Creek Ct", "Sugarloaf Dr", "Sugarloaf Ln", "Sugarloaf Ter", "Singing Hills Rd", "Silva Dale Rd", "Smith Rd", "Scripps Haven Ln", "Saratoga Ct", "Shandelin Ct", "Shantilly Ct", "Sharmar Ct", "Shawn Ct", "South Gate Rd", "South Ave", "Southview Dr", "Squire Ct", "St Andrews Ln", "St Andrews Pl", "St Paul Dr", "Stephanie Ln"]}, {"name": "Miranda", "days": "Mon-Wed Wk6", "streets": ["Miranda Ave", "Alamo Way", "La Serena Ave", "Via Romero", "Via Moraga", "Via Lucia", "Via Del Gato", "South Via Lucia", "Jones Ranch Rd", "Justin Morgan Dr", "Jackson Way", "South Jackson Way", "Hemme Ave", "Abbott Ln", "Acacia Ln", "Adams Ranch Rd", "Adele Ct", "Alamo Ln", "Alamo Ranch Rd", "Alamo Springs Dr", "Andith Ln", "Apple Tree Ln", "Ardendale Ct", "Arjang Ct", "Asa Maria Ct", "Augusta Ct", "Banister Ln", "Barbee Ln", "Bolla Ave", "Bolla Pl", "Bollinger Canyon Rd", "Boulder Dr", "Bridges Ct", "Britain Ct", "Brookdale Ave", "Bryan Ct", "Bryan Dr", "Buckthorn Pl"]}, {"name": "Bryan Ranch", "days": "Thu-Sat Wk6", "streets": ["Bryan Ranch Rd", "Green Valley Rd", "Las Trampas Rd", "Country Oak Ln", "Castle Hill Ranch Rd", "Serenity Ln", "Dot Dr", "Muir Ln", "Mountain Canyon Ln", "Hawk Ct", "Mystic Pl", "Ironwood Pl", "Erselia Trl", "Kemp Ct", "Xavier Ct", "Twelve Oaks Ct", "Rolling Ln", "Romero Cir", "Romley Ln", "Red Wing Dr", "Redfearn Dr", "Regent Pl", "Ridgewood Rd", "Robbins Pl", "Rolling Hills Ct", "Rae Ann Dr", "Ramona Way", "Ranger Ct", "Post Rd", "Provo Ln", "Pueblo Ct", "Plaza Rd"]}]}, {"id": "blackhawk", "name": "Blackhawk", "color": "#f43f5e", "tier": "A", "avg": "$2.8M", "wk": "7", "note": "Luxury gated. Focus non-gated perimeter.", "nbs": [{"name": "Blackhawk Perimeter", "days": "Mon-Wed Wk7", "streets": ["Blackhawk Rd", "Blackhawk Dr", "Hidden Oak Dr", "Camino Tassajara", "Sycamore Valley Rd", "Deer Ridge Rd", "Deer Ridge Dr", "Deer Ridge Pl", "Deer Trail Dr", "Deer Trail Ct", "Deer Trail Ln", "Deer Hollow Dr", "Deer Meadow Dr", "Deer Meadow Ct", "Deer Meadow Ln", "Deer Meadow Pl", "Deer Oak Way", "Deer Crest Dr", "Deer Crest Pl", "Deer Creek Ln", "Deer Field Way", "Amberfield Ln", "Ambience Way", "Almadine Way", "Alta Vista Way", "Alta Vista Ct", "Abigail Cir"]}, {"name": "Summit Crest", "days": "Thu-Sat Wk7", "streets": ["Summit Crest Dr", "Palomino Ct", "Eagle Ct", "Falcon Dr", "Vista Grande Dr", "Diablo Ranch Ct", "Devonshire Ct", "David Ln", "Deepcreek Ct", "Amelia Ln", "Brooktree Dr", "Charolais Ct", "Tobiano Ct", "Rassani Dr", "Parkhaven Dr", "Sweetpea Ct", "Leafield Rd", "Lawrence Rd", "Carmenera St"]}]}, {"id": "lafayette", "name": "Lafayette", "color": "#34d399", "tier": "B", "avg": "$1.7M", "wk": "8-9", "note": "Burton Valley most family-dense.", "nbs": [{"name": "Burton Valley", "days": "Mon-Wed Wk8", "streets": ["Burton Valley Rd", "Reliez Valley Rd", "Dolores Dr", "Rancho Colorados Dr", "Mariposa Ave", "Via Contenta", "Los Arabis Dr", "La Fiesta Dr", "Roble Rd", "Loma Vista Dr", "Loma Vista Ave", "Pleasant Hill Rd", "Springbrook Rd", "Valle Vista Ave", "Camino Diablo", "Las Trampas Rd", "Canon Dr", "Withers Ave", "Wilson Rd", "Vine Hill Rd", "Upper Happy Valley Rd", "Franke Ln", "Kendall Ln", "Saranap Ave", "Condit Rd", "Bickerstaff Rd"]}, {"name": "Happy Valley", "days": "Thu-Sat Wk8", "streets": ["Happy Valley Rd", "Springhill Rd", "Merriewood Dr", "Glen Rd", "Crestview Dr", "Estates Dr", "Rose Ln", "Mountain View Dr", "Valley Vista Ln", "Lucas Ranch Rd", "Old Jonas Hill Rd", "Canyon Rd", "Oak Hill Rd", "Deer Hill Rd", "Risa Rd", "El Nido Ranch Rd", "Silver Springs Rd", "Redwood Rd", "Moraga Rd", "Monticello Rd", "Reliez Station Rd", "Stonehedge Rd"]}, {"name": "Reliez Valley", "days": "Mon-Sat Wk9", "streets": ["Mt Diablo Blvd", "Reliez Valley Rd", "Boldt Dr", "Las Trampas Rd", "Pleasant Hill Rd", "Hough Ave", "Bell St", "Acalanes Rd", "Dewing Ave", "Brown Ave", "Walnut Blvd", "Allen Ave", "Cecilia Dr", "Calle La Vuelta", "Alamo Ave", "El Camino Diablo", "Camino Sobrante", "Portola Dr", "Golden Gate Way", "School St", "Alhambra Ave", "Aster Ct", "Brook St", "Caminito Dr"]}]}, {"id": "orinda", "name": "Orinda", "color": "#fb923c", "tier": "B", "avg": "$1.8M", "wk": "10-11", "note": "Older homes. Glorietta best density.", "nbs": [{"name": "Glorietta", "days": "Mon-Wed Wk10", "streets": ["Glorietta Blvd", "Overhill Rd", "Overhill Ct", "Tarabrook Dr", "Meadow View Rd", "Owl Hill Rd", "Owl Hill Ct", "Oakwood Rd", "Estates Dr", "Southwood Dr", "Brookwood Rd", "Van Tassel Ln", "Hillcrest Dr", "Lombardy Ln", "El Camino Moraga", "Via Floreado", "Tara Rd", "Barbara Rd", "Brookside Rd", "La Cuesta Rd", "Beatricia Rd", "Las Cascades", "Las Vegas Rd", "Frontal Rd", "Patricia Rd", "Patrick Ln", "Ravenhill Rd", "Red Coach Ln", "Oriole Rd", "Parklane Dr"]}, {"name": "Orinda Village", "days": "Thu-Sat Wk10", "streets": ["Orinda Way", "Camino Sobrante", "La Espiral", "San Pablo Dam Rd", "Bates Blvd", "Bates Ct", "Miner Rd", "Moraga Way", "Camino Pablo", "Davis Rd", "Mira Loma Rd", "Village Gate Rd", "Santa Maria Way", "Village View Ct", "Martha Rd", "Ironbark Cir", "Knickerbocker Ln", "Park Lane Dr", "Evergreen Dr", "Monterey Ter", "Underhill Rd", "Warford Ter", "La Vuelta", "Gateway Blvd", "Via Hermosa", "Lucille Way", "Stein Way", "La Campana Rd", "Dos Posos", "Bienvenida", "Sally Ann Rd", "Las Aromas"]}, {"name": "Sleepy Hollow", "days": "Mon-Sat Wk11", "streets": ["Sleepy Hollow Ln", "Orindawoods Dr", "Ivy Dr", "Loma Vista Dr", "Thornhill Dr", "Altarinda Dr", "Altarinda Cir", "Altarinda Rd", "E Altarinda Dr", "St Stephens Dr", "Camino Encinas", "Oak Rd", "Orchard Rd", "Kite Hill Rd", "Rich Acres Rd", "Ridge Gate Rd", "Ridge Ln", "Robert Rd", "Rose Ln", "Roselle Ln", "Rustic Way", "Ardilla Rd", "Ardith Ct", "Ardith Dr", "Ardor Dr", "Ardor Ln", "Aspinwall Ct", "Bear Ridge Rd", "Bear Ridge Ct", "Brookbank Rd", "Broadview Ter", "Bryant Way", "Candlestick Rd", "Canyon View Dr", "Carisbrook Dr", "Cedar Ln", "Cedar Ter"]}]}, {"id": "walnutcreek", "name": "Walnut Creek", "color": "#818cf8", "tier": "A", "avg": "$1.3M", "wk": "12-13", "note": "Highest total door count.", "nbs": [{"name": "Northgate", "days": "Mon-Wed Wk12", "streets": ["Northgate Rd", "Cherry Ln", "Oak Grove Rd", "Walnut Blvd", "Bancroft Rd", "Ygnacio Valley Rd", "Arbolado Dr", "Castle Rock Rd", "Seven Hills Ranch Rd", "Shadelands Dr", "Shadowbrook Ct", "Savannah Cir", "Savannah Ct", "Savoy Ct", "Saxton Ct", "School Ln", "Scots Ct", "Scots Ln", "Sebastian Ln", "Seccombe Ct", "Selling Ct", "Sellings Ct", "Seneca Ct", "Sequoia Ave", "Sequoia Ln", "Sequoia Ter", "Serena Gardens", "Shady Glen Rd", "Shady Ln", "Shamrock Dr", "Shannon Ln", "Sharene Ln", "Sharp Ave", "Sharpe Ave", "Shasta Ln"]}, {"name": "Larkey Park", "days": "Thu-Sat Wk12", "streets": ["Larkey Ln", "Lakewood Dr", "Treat Blvd", "Walnut Knolls Dr", "Olympic Blvd", "Rudgear Rd", "Rudgear Meadows Dr", "Tice Valley Blvd", "Shuey Ave", "Riviera Ave", "Overlook Dr", "Summit Rd", "Arroyo Way", "Canyon Oak Rd", "Meadow Creek Rd", "Mitchell Dr", "Sterling Ridge Dr", "Pleasant Valley Rd", "Coggins Dr", "Marshall Dr", "Marchbanks Dr", "Brownstone Rd", "Brenda Ln", "Bates Blvd", "Barker Rd", "Bamboo Dr", "Bailey Rd", "Austris Ct", "Avon Rd", "Autumn Ln"]}, {"name": "Saranap", "days": "Mon-Sat Wk13", "streets": ["Saranap Ave", "Boulevard Way", "Danville Blvd", "Camino Amigo", "Paseo Nogal", "La Paloma Rd", "Sugarloaf Dr", "Wild Oak Dr", "Woodlands Dr", "Somerset Dr", "Sterling Ct", "Sancho Rd", "San Miguel Dr", "San Marcos Dr", "Lilac Dr", "Livorna Estates Dr", "Livorna Rd", "Lafayette Valley Estates Dr", "Joaquin Ranch Rd", "Carriage Hills Dr", "Carriage Square Dr", "Blackwood Dr", "Beacon Ridge Dr", "Brooktree Rd", "Bolton Dr", "Bobwhite Ct", "Blue Oak Ct", "Birchwood Ct", "Beverly Pl", "Benson Dr", "Bennett Ln"]}]}, {"id": "pleasanthill", "name": "Pleasant Hill", "color": "#94a3b8", "tier": "C", "avg": "$0.85M", "wk": "14", "note": "Highest door count, lower avg ticket.", "nbs": [{"name": "Gregory Gardens", "days": "Mon-Wed Wk14", "streets": ["Gregory Ln", "Boyd Rd", "Grayson Rd", "Oak Park Blvd", "Morello Ave", "Vivian Dr", "Annabel Ln", "Paso Cerro", "El Curtola Blvd", "Vine Hill Rd", "Contra Costa Blvd", "Denkinger Rd", "Patricia Rd", "Drummond Ave", "Margarita Dr", "Linda Dr", "Beverly Dr", "Grandview Dr", "Woodsworth Dr", "Willow Pass Rd", "Chilpancingo Pkwy", "Paso Nogal", "Coggins Dr", "Hookston Rd", "Pine Hollow Rd", "Cleaveland Rd", "Myrtle Dr", "Barrington Rd", "Brubeck Dr", "Buskirk Ave", "Butte Dr"]}, {"name": "Sun Valley", "days": "Thu-Sat Wk14", "streets": ["Wayne Dr", "Ellinwood Dr", "Sun Valley Dr", "Camelback Rd", "Longbrook Way", "Golf Club Rd", "Viera Ave", "Taylor Blvd", "Pacheco Blvd", "Monument Blvd", "Alhambra Ave", "Alhambra Valley Rd", "Arthur Rd", "Appian Way", "Dunning Ave", "El Divisadero", "Gregory Hills Dr", "Geary Rd", "Harris Ave", "Hillside Dr", "Jones Rd", "Keller Ave", "Las Juntas Way", "Milbrae Ave", "Minert Rd", "Patterson Blvd", "Primrose Dr", "Putnam Blvd", "Ridgewood Ave", "Rolph Dr", "Rosewood Dr"]}]}];
+var TC={A:'#22c55e',B:'#f59e0b',C:'#64748b'};
+function gz(){return ZONES[zi];}
+function gnb(){return gz().nbs[ni];}
+function gsts(){var z=gz(),nb=gnb();return nb.streets.concat(ST.extra[z.id+'|'+nb.name]||[]);}
+function stof(zid,nbn,s){return ST.status[zid+'|'+nbn+'|'+s];}
+function g(id){return document.getElementById(id);}
+function czS(z){var t=0,d=0,sk=0;z.nbs.forEach(function(nb){var all=nb.streets.concat(ST.extra[z.id+'|'+nb.name]||[]);t+=all.length;d+=all.filter(function(s){return ST.status[z.id+'|'+nb.name+'|'+s]==='done';}).length;sk+=all.filter(function(s){return ST.status[z.id+'|'+nb.name+'|'+s]==='skip';}).length;});return{t:t,d:d,sk:sk,r:t-d-sk};}
+function cnbS(zid,nb){var all=nb.streets.concat(ST.extra[zid+'|'+nb.name]||[]);return{t:all.length,d:all.filter(function(s){return ST.status[zid+'|'+nb.name+'|'+s]==='done';}).length,sk:all.filter(function(s){return ST.status[zid+'|'+nb.name+'|'+s]==='skip';}).length};}
+function crepS(){var r={};ST.log.forEach(function(e){if(!e.rep||e.rep==='Unknown')return;if(!r[e.rep])r[e.rep]={d:0,sk:0,ts:0,zone:'',date:'',time:''};if(e.action==='done')r[e.rep].d++;if(e.action==='skip')r[e.rep].sk++;if((e.timestamp||0)>r[e.rep].ts){r[e.rep].ts=e.timestamp||0;r[e.rep].zone=e.zone;r[e.rep].date=e.date;r[e.rep].time=e.time;}});return r;}
+async function loadData(){setSyn(true);var res=await Promise.all([dbGet('knock_status'),dbGet('knock_extra'),dbGet('knock_log')]);if(res[0]&&typeof res[0]==='object')ST.status=res[0];if(res[1]&&typeof res[1]==='object')ST.extra=res[1];if(res[2]&&Array.isArray(res[2]))ST.log=res[2];setSyn(false);renderAll();}
+function setSyn(v){var e=g('slbl');if(!e)return;if(v){e.textContent='syncing';e.style.color='#f59e0b';}else{e.textContent='live '+new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});e.style.color='#22c55e';}}
+function flashSaved(){var e=g('slbl');if(!e)return;e.textContent='saved';e.style.color='#22c55e';clearTimeout(saveTmr);saveTmr=setTimeout(function(){setSyn(false);},2000);}
+async function saveST(){await dbSet('knock_status',ST.status);flashSaved();}
+async function saveEX(){await dbSet('knock_extra',ST.extra);}
+async function saveLG(){await dbSet('knock_log',ST.log);}
+function doPw(){if(g('pw').value===PW){g('login').style.display='none';g('app').style.display='flex';if(!repName){g('repmod').style.display='flex';setTimeout(function(){g('repinp').focus();},100);}else{g('rd').textContent=repName;}loadData();setInterval(loadData,15000);buildResources();}else{g('pwerr').style.display='block';g('pw').value='';}}
+function doRep(){var v=g('repinp').value.trim();if(!v)return;repName=v;localStorage.setItem('ajhs_rep9',v);g('repmod').style.display='none';g('rd').textContent=v;}
+function doPin(){if(g('pininp').value===PIN){g('tm').textContent='Mgr (open)';g('pinmod').style.display='none';g('pininp').value='';window._pok=true;sv('manager');}else{g('pinerr').style.display='block';g('pininp').value='';}}
+function sv(v){var map={field:'vf',resources:'vr',manager:'vm'},tmap={field:'tf',resources:'tr',manager:'tm'};['vf','vr','vm'].forEach(function(x){g(x).style.display='none';});['tf','tr','tm'].forEach(function(x){g(x).classList.remove('on');});g(map[v]).style.display=(v==='field'?'flex':'block');g(tmap[v]).classList.add('on');if(v==='manager')renderMgr();}
+g('pwbtn').addEventListener('click',doPw);
+g('pw').addEventListener('keydown',function(e){if(e.key==='Enter')doPw();});
+g('repbtn').addEventListener('click',doRep);
+g('repinp').addEventListener('keydown',function(e){if(e.key==='Enter')doRep();});
+g('pinbtn').addEventListener('click',doPin);
+g('pininp').addEventListener('keydown',function(e){if(e.key==='Enter')doPin();});
+g('pincancel').addEventListener('click',function(){g('pinmod').style.display='none';g('pininp').value='';g('pinerr').style.display='none';});
+g('repchg').addEventListener('click',function(){g('repinp').value=repName;g('repmod').style.display='flex';setTimeout(function(){g('repinp').focus();},100);});
+g('refresh').addEventListener('click',loadData);
+document.querySelectorAll('.nt button').forEach(function(b){b.addEventListener('click',function(){var v=b.getAttribute('data-view');if(v==='manager'&&!window._pok){g('pinmod').style.display='flex';setTimeout(function(){g('pininp').focus();},100);return;}sv(v);});});
+document.querySelectorAll('.rt button').forEach(function(b){b.addEventListener('click',function(){var t=b.getAttribute('data-rtab');g(t==='pricing'?'rp':'rs').style.display='block';g(t==='pricing'?'rs':'rp').style.display='none';g(t==='pricing'?'rtp':'rts').classList.add('on');g(t==='pricing'?'rts':'rtp').classList.remove('on');});});
+function renderAll(){rHdr();rZtabs();rZmeta();rSide();rStreets();rBbar();}
+function rHdr(){var tot=ZONES.reduce(function(a,z){return a+czS(z).t;},0);var done=ZONES.reduce(function(a,z){return a+czS(z).d;},0);var pct=tot>0?Math.round(done/tot*100):0;g('hstat').innerHTML=tot+' streets <span style="color:#22c55e">'+done+' knocked ('+pct+'%)</span>';}
+function rZtabs(){var el=g('zt');el.innerHTML='';ZONES.forEach(function(zo,i){var s=czS(zo);var pct=s.t>0?Math.round(s.d/s.t*100):0;var active=i===zi;var btn=document.createElement('button');btn.style.cssText=active?'border-bottom-color:'+zo.color+';color:'+zo.color+';font-weight:700':'';btn.innerHTML='<span style="font-size:7px;color:'+zo.color+';opacity:.4;margin-right:3px">W'+zo.wk+'</span>'+zo.name+(pct>0?'<span style="margin-left:4px;font-size:7px;color:'+(pct===100?'#22c55e':zo.color)+'">'+pct+'%</span>':'');btn.addEventListener('click',function(){zi=i;ni=0;expK=null;renderAll();});el.appendChild(btn);});}
+function rZmeta(){var z=gz(),e=g('zm');e.style.background=z.color+'07';e.style.borderBottomColor=z.color+'15';e.innerHTML='<span style="color:#333">WK</span> <b style="color:'+z.color+';margin-right:8px">'+z.wk+'</b><span style="color:#333">AVG</span> <b style="color:#aaa;margin-right:8px">'+z.avg+'</b><span style="color:#333">TIER</span> <b style="color:'+TC[z.tier]+';margin-right:8px">'+z.tier+'</b><span style="color:#252525">'+z.note+'</span>';}
+function rSide(){var z=gz(),el=g('side');el.innerHTML='';z.nbs.forEach(function(nb,i){var s=cnbS(z.id,nb);var pct=s.t>0?((s.d+s.sk)/s.t*100):0;var div=document.createElement('div');div.className='nbi'+(i===ni?' on':'');div.style.setProperty('--c',z.color);div.innerHTML='<div class="nbi-n">'+nb.name+'</div><div class="nbi-d">'+nb.days+'</div><div class="nbi-s">'+s.d+'/'+s.t+' done '+s.sk+' skip</div>'+(pct>0?'<div style="margin-top:3px;height:2px;background:#151515;border-radius:1px"><div style="height:2px;width:'+pct+'%;background:'+z.color+'60;border-radius:1px"></div></div>':'');div.addEventListener('click',function(){ni=i;expK=null;rSide();rStreets();rBbar();});el.appendChild(div);});var lbl=document.createElement('div');lbl.style.cssText='margin:8px 8px 3px;font-size:7px;color:#1e1e1e;letter-spacing:.1em';lbl.textContent='RECENT';el.appendChild(lbl);ST.log.slice(0,6).forEach(function(e){var d=document.createElement('div');d.style.cssText='padding:3px 9px;border-bottom:1px solid #0c0c0c';d.innerHTML='<div style="font-size:7px;color:#282828"><span style="color:#3a3a3a;font-weight:700">'+e.rep+'</span> <span style="color:'+(e.action==='done'?'#1a4a1a':e.action==='skip'?'#4a1a1a':'#2a2a2a')+'">'+e.action+'</span></div><div style="font-size:6px;color:#1c1c1c;margin-top:1px">'+e.street+' - '+e.time+'</div>';el.appendChild(d);});}
+function rStreets(){var z=gz(),nb=gnb(),sts=gsts(),el=g('pane');el.innerHTML='';var hdr=document.createElement('div');hdr.innerHTML='<div style="font-size:12px;font-weight:700;color:#f0f0f0">'+nb.name+'</div><div style="font-size:8px;color:#333;margin-top:2px">'+nb.days+' - '+sts.length+' streets</div>';el.appendChild(hdr);var list=document.createElement('div');list.className='sl';el.appendChild(list);sts.forEach(function(s,i){var isA=i>=nb.streets.length;var val=stof(z.id,nb.name,s);var done=val==='done',skip=val==='skip';var row=document.createElement('div');row.className='sr'+(done?' dn':skip?' sk':'');var inner=document.createElement('div');inner.className='sri';inner.innerHTML='<div class="srn" style="color:'+z.color+'">'+String(i+1).padStart(2,'0')+'</div><div class="srs">'+s+(isA?' <span style="font-size:7px;color:#1a5a1a;background:#0a1a0a;border:1px solid #143a14;padding:1px 4px;border-radius:2px">ADDED</span>':'')+'</div>';var bs=document.createElement('div');bs.className='srbr';var bd=document.createElement('button');bd.className='srb don'+(done?' on':'');bd.textContent='V';bd.addEventListener('click',function(ev){ev.stopPropagation();tSt(z.id,nb.name,s,'done');});bs.appendChild(bd);var bk=document.createElement('button');bk.className='srb ski'+(skip?' on':'');bk.textContent='X';bk.addEventListener('click',function(ev){ev.stopPropagation();tSt(z.id,nb.name,s,'skip');});bs.appendChild(bk);if(isA){var bx=document.createElement('button');bx.className='srb';bx.textContent='Del';bx.addEventListener('click',function(ev){ev.stopPropagation();dSt(z.id,nb.name,s);});bs.appendChild(bx);}inner.appendChild(bs);row.appendChild(inner);list.appendChild(row);});var ar=document.createElement('div');ar.className='ar';var inp=document.createElement('input');inp.className='ai';inp.id='ai';inp.placeholder='Add a street found on the ground...';inp.addEventListener('keydown',function(e){if(e.key==='Enter')aSt();});var btn=document.createElement('button');btn.style.cssText='padding:7px 11px;border-radius:5px;font-size:10px;font-weight:700;border:1px solid '+z.color+'30;background:'+z.color+'10;color:'+z.color;btn.textContent='+ Add';btn.addEventListener('click',aSt);ar.appendChild(inp);ar.appendChild(btn);el.appendChild(ar);}
+function rBbar(){var z=gz(),nb=gnb(),sts=gsts();var done=sts.filter(function(s){return stof(z.id,nb.name,s)==='done';}).length;var skip=sts.filter(function(s){return stof(z.id,nb.name,s)==='skip';}).length;var left=sts.filter(function(s){return !stof(z.id,nb.name,s);}).length;var pct=sts.length>0?done/sts.length*100:0;g('bf').style.width=pct+'%';g('bf').style.background=gz().color;g('bs').textContent=done+' knocked  '+skip+' skip  '+left+' left';}
+async function tSt(zid,nbn,s,val){var k=zid+'|'+nbn+'|'+s;if(ST.status[k]===val)delete ST.status[k];else ST.status[k]=val;var entry={time:new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'}),date:new Date().toLocaleDateString('en-US',{month:'short',day:'numeric'}),timestamp:Date.now(),rep:repName||'Unknown',action:ST.status[k]||'cleared',street:s,zone:zid};ST.log=[entry].concat(ST.log).slice(0,200);rStreets();rSide();rBbar();rHdr();await saveST();await saveLG();}
+async function aSt(){var inp=g('ai');if(!inp||!inp.value.trim())return;var nb=gnb(),z=gz(),k=z.id+'|'+nb.name;ST.extra[k]=(ST.extra[k]||[]).concat([inp.value.trim()]);inp.value='';rStreets();rBbar();await saveEX();}
+async function dSt(zid,nbn,s){var k=zid+'|'+nbn;ST.extra[k]=(ST.extra[k]||[]).filter(function(x){return x!==s;});delete ST.status[zid+'|'+nbn+'|'+s];rStreets();rBbar();await saveEX();await saveST();}
 
-// ── SUPABASE ──────────────────────────────────────────────────────
-async function dbGet(key) {
-  try {
-    const r = await fetch(`${SUPA_URL}/rest/v1/knock_data?key=eq.${key}&select=value`, {
-      headers: { 'apikey': SUPA_KEY, 'Authorization': `Bearer ${SUPA_KEY}` }
-    });
-    const d = await r.json();
-    if (!d || !d.length) return null;
-    return JSON.parse(d[0].value);
-  } catch { return null; }
-}
-async function dbSet(key, val) {
-  try {
-    await fetch(`${SUPA_URL}/rest/v1/knock_data`, {
-      method: 'POST',
-      headers: { 'apikey': SUPA_KEY, 'Authorization': `Bearer ${SUPA_KEY}`, 'Content-Type': 'application/json', 'Prefer': 'resolution=merge-duplicates' },
-      body: JSON.stringify({ key, value: JSON.stringify(val), updated_at: new Date().toISOString() })
-    });
-  } catch {}
-}
-
-// ── STATE ─────────────────────────────────────────────────────────
-let state = { status: {}, extra: {}, log: [] };
-let repName = localStorage.getItem('ajhs_rep6') || '';
-let pinUnlocked = false;
-let activeZoneIdx = 0;
-let activeNbIdx = 0;
-let expandedStreet = null;
-let currentView = 'field';
-let currentResTab = 'pricing';
-let mgExpandedZone = null;
-let saveTimer = null;
-
-// ── ZONES DATA ────────────────────────────────────────────────────
-const ZONES = [
-  { id:'moraga', name:'Moraga', color:'#22d3ee', tier:'A', avgHome:'$1.4M', weeks:'1–2', note:'HQ zone near St. Mary\'s. Rheem Valley highest density. Sanders Ranch highest value.',
-    neighborhoods:[
-      {name:'Zone 1 — Campolindo',days:'Mon–Wed Wk1',streets:['Betlin Pl','Blumert Pl','Buckingham Dr','Calle La Mesa','Calle La Montana','Camelford Ct','Campolindo Ct','Campolindo Dr','Corte Aires','Corte Amigos','Corte Annette','Corte Azul','Corte De Oro','Corte De Rosas','Corte Del Caballo','Corte Del Campo','Corte Del Sol','Corte Encina','Corte Fortuna','Corte Fresca','Corte Granada','Corte La Rado','Corte Mateo','Corte Monterey','Corte Pinon','Corte Pinto','Corte Royal','Corte Santa Clara','Corte Yolanda','Lenelle Dr','Lucia Ln','Natalie Dr','Paseo Del Campo','Paseo Del Rio','Paseo Grande','Quintas Ln','Sky-Hy Dr','Via Granada','Wimpole St','Woodford Dr']},
-      {name:'Zone 2 — Donald/Ascot',days:'Thu–Sat Wk1',streets:['Ascot Ct','Ascot Dr','Ascot Pl','Devin Dr','Donald Dr','El Paraiso Ct','Harold Dr','Kimberley Dr','La Salle Dr','Scofield Dr']},
-      {name:'Zone 3 — Larch/School St',days:'Mon–Wed Wk2',streets:['Alderbrook Pl','Beford Pl','Belfair Pl','Birchwood Dr','Birkdale Pl','Carroll Dr','Chalda Way','Claudia Ct','Derby Ln','Draeger Dr','Fernwood Dr','Haven Ct','Kent Ct','Kings Crown Ct','Kingsford Dr','Lambeth Square','Longfield Pl','Lucas Dr','Netherton Ct','Newberry Pl','Paseo Linares','Redwing Pl','Stafford Dr','Turk Dr','Williams Dr','Willow Spring Ct','Willow Spring Ln']},
-      {name:'Zone 4 — Camino Pablo/Greenfield',days:'Thu Wk2',streets:['Archer Cir','Arroyo Dr','Ashbrook Pl','Ashford Pl','Camino Ricardo','Corliss Dr','Crossbrook Dr','Danefield Pl','Fieldbrook Pl','Greenfield Dr','Hardie Dr','Idlewood Ct','Ivy Pl','Lynwood Pl','Moraga Valley Ln','Saint Andrews Dr','Sullivan Dr','Thorndale Pl','Wakefield Dr','Warfield Dr','Winslow Pl','Woodside Dr','York Pl']},
-      {name:'Zone 5 — St. Mary\'s/Bollinger',days:'Fri–Sat Wk2',streets:['Allen Ct','Alta Mesa','Bollinger Canyon Rd','Breck Ct','Camino Peral','Carter Dr','David Dr','Del Monte Ct','Del Monte Way','Del Rio Ct','Del Rio Way','Jean Ct','Joseph Dr','Kippy Ct','Russell Dr','San Pablo Ct','Santa Catalina Ct','Wickham Dr']},
-      {name:'Zone 6 — Country Club/Sanders Ranch',days:'Mon–Wed Wk2',streets:['Agusta Dr','Carr Dr','Constance Pl','Cortes Ct','Country Club Dr','Cypress Pt Way','De La Cruz Way','Fleuti Dr','Glen Alpine','Gloria Ct','Hazelwood Pl','Hetfield Pl','Inverleith Ter','Kingston Ct','Lance Ct','Rick Ct','Sandringham North','Sandringham South','Saint Andrews Dr','Sanders Dr','School St','Sheila Ct','Sherwood Ct','Silvia Ct','Southard Ct','Viader Dr','Wandel Dr']},
-      {name:'Zone 7 — Rheem Valley/Larch Ave',days:'Thu–Sat Wk2',streets:['Amberwood Ct','Baitx Dr','Blaine Cir','Brookfield Dr','Butterfield Pl','Camino Pablo','Canning Ct','Cedarwood Dr','Deerfield Dr','Dickenson Dr','Eileen Ct','El Camino Flores','Fairfield Pl','Freitas Dr','Gaywood Pl','Hammond Pl','Hodges Dr','Huff Ct','Juniper Way','Kazar Ct','Ketelsen Dr','Knoll Dr','Lakefield Pl','Larch Ave','Louise Ct','Lynch Ct','Marie Pl','Mayfield Pl','Millfield Pl','Oxford Dr','Pembrook Ct','Pimental Ct','Redfield Pl','Rimer Dr','Roberts Ct','Ross Dr','Sarah Ln','Selborne Way','Shuey Dr','Sparrow Ct','Springfield Pl','Stonefield Pl','Tharp Dr','Thune Ave','Tia Pl','Trinity Ter','Vista Encinos','Walford Dr','Whitethorne Dr']},
-    ]},
-  { id:'danville', name:'Danville', color:'#f59e0b', tier:'A', avgHome:'$2.0M', weeks:'3–4', note:'Greenbrook ~800 homes. Sycamore Valley family dense. Diablo Rd = big tickets.',
-    neighborhoods:[
-      {name:'Greenbrook / Greenwood',days:'Mon–Wed Wk3',streets:['Greenbrook Dr','Fircrest Ln','Sherburne Hills Rd','Tice Valley Blvd','El Pintado Rd','Meadow Dr','Ridgewood Rd','El Capitan Dr','Greenbrook Ct','Los Arabis Dr','Greenwood Dr','Laurel Dr','Valley Oak Dr','Sequoia Ct','Sycamore Ct','Oakwood Ct','Wildwood Dr','Arbolado Dr','Garden Creek Pl','Northbrook Ct','Southbrook Ct','Hillcrest Dr','Meadow Ct','Wood Creek Rd','Rolling Hills Dr','Creekside Dr','Greenfield Rd','Brookview Dr']},
-      {name:'Sycamore Valley / Dansborough',days:'Thu–Sat Wk3',streets:['Sycamore Valley Rd','Holbrook Dr','Fostoria Way','Dansborough Dr','Sycamore Creek Way','Sycamore Hills Ct','Camino Tassajara','Belleau Ct','Sundance Ct','Palomino Dr','Stallion Ct','Quarterhorse Ln','Clydesdale Ct','Mustang Ct','Pinto Ct','Appaloosa Ct','Arabella Ct','Remington Ct','San Ramon Valley Dr','Tassajara Ridge Rd','Crow Canyon Rd','Del Amigo Rd','Adair Ct','Adobe Dr','Alicante Dr','Alicante Ct','Alicante Pl','Ambleside Ct','Allegheny Dr','Alta Loma Ct','Alviso Way','Amigo Rd','Amigo Ct']},
-      {name:'Westside Danville / Downtown',days:'Mon–Wed Wk4',streets:['La Gonda Way','El Cerro Blvd','Prospect Ave','Linda Mesa Ave','Brookside Dr','Laurenita Way','Harlan Dr','Montair Dr','Cameo Acres Dr','Oak Hill Rd','Hartz Ave','Railroad Ave','Front St','Church St','School St','San Ramon Valley Blvd','Camino Ramon','Love Ln','Meadowlark Ln','Paraiso Dr','Sonora Ave','Santiago Ln','Starview Dr','Marian Ln','Quinterra Ln','Acalanes Rd','Camino Amigo','Robyn Dr','Tunbridge Rd','Willowview Ct','Sweetpea Ct','Richard Ln','Tamarind Ln']},
-      {name:'Diablo Rd / Green Valley / Crow Canyon',days:'Thu–Sat Wk4',streets:['Diablo Rd','Stone Valley Rd','Crow Canyon Rd','Lawrence Rd','Green Valley Rd','Camille Ave','Alameda Diablo','Danville Blvd','Clipper Hill Rd','Oakgate Dr','Entrada Verde','Franke Ln','Wilder Rd','Ackerman Dr','Adagio Dr','Alexander Ln','Elati Ct','Montoya Way','Parkhaven Dr','Rassani Dr','Leafield Rd','Brumby St','Charolais Ct','Tobiano Ct','Brooktree Dr','Carmenera St']},
-    ]},
-  { id:'alamo', name:'Alamo', color:'#a78bfa', tier:'A', avgHome:'$2.5M', weeks:'5–6', note:'Highest avg ticket. Roundhill CC crown jewel. Many courts = high close rate.',
-    neighborhoods:[
-      {name:'Roundhill CC / Windsor Green',days:'Mon–Wed Wk5',streets:['Roundhill Dr','Roundhill Rd','Royal Oaks Dr','Royal Oaks Ct','Royal Ridge Ct','Windsor Green Dr','Windsor Ct','Windsor Pl','Regina Dr','Ridgemont Dr','Barclay Ct','Barrington Ln','Abington Ln','Adrienne Dr','Alamo Country Cir','Alamo Glen Dr','Alamo Glen Ct','Alamo Glen Trl','Alamo Hills Dr','Alamo Hills Ct','Alamo Oaks Ln','Alta Sierra Pl','Amanda Ct','Amber Pl','Amy Way','Alamo Sq','Alamo View Pl','Alamo Way','Angela Ave','Arbor Ln','Anderson Ranch Ct','Bando Ct','Biltmore Dr','Biltmore Ct','Bevmar Ln','Bernie Ln','Austin Ln','Avalon Ct','Ashford Ct']},
-      {name:'Stone Valley / Stonegate / White Gate',days:'Thu–Sat Wk5',streets:['Stone Valley Rd','Stone Valley Oaks Dr','Stone Hill Dr','Stone Creek Pl','Stonegate Dr','Stonegate Ct','Stonegate Ln','Stonecastle Dr','White Gate Rd','Livorna Rd','Stone Valley Rd West','Stone Valley Way','Sandstone Rd','Sandstone Ct','Sugar Creek Ln','Sugar Creek Ct','Sugarloaf Dr','Sugarloaf Ln','Sugarloaf Ter','Singing Hills Rd','Silva Dale Rd','Smith Rd','Scripps Haven Ln','Saratoga Ct','Shandelin Ct','Shantilly Ct','Sharmar Ct','Shawn Ct','South Gate Rd','South Ave','Southview Dr','Southview Ln','Squire Ct','St Andrews Ln','St Andrews Pl','St Paul Dr','Stephanie Ln']},
-      {name:'Westside Alamo / Miranda',days:'Mon–Wed Wk6',streets:['Miranda Ave','Alamo Way','La Serena Ave','Via Romero','Via Moraga','Via Lucia','Via Del Gato','South Via Lucia','Jones Ranch Rd','Justin Morgan Dr','Jackson Way','South Jackson Way','Hemme Ave','Abbott Ln','Acacia Ln','Adams Ranch Rd','Adele Ct','Alamo Ln','Alamo Ranch Rd','Alamo Springs Dr','Andith Ln','Apple Tree Ln','Ardendale Ct','Arjang Ct','Asa Maria Ct','Augusta Ct','Banister Ln','Barbee Ln','Bolla Ave','Bolla Pl','Bollinger Canyon Rd','Boulder Dr','Bridges Ct','Britain Ct','Brookdale Ave','Bryan Ct','Bryan Dr','Buckthorn Pl']},
-      {name:'Bryan Ranch / East Alamo',days:'Thu–Sat Wk6',streets:['Bryan Ranch Rd','Green Valley Rd','Las Trampas Rd','Country Oak Ln','Castle Hill Ranch Rd','Serenity Ln','Dot Dr','Muir Ln','Mountain Canyon Ln','Hawk Ct','Mystic Pl','Ironwood Pl','Erselia Trl','Kemp Ct','Xavier Ct','Twelve Oaks Ct','Rolling Ln','Romero Cir','Romley Ln','Red Wing Dr','Redfearn Dr','Regent Pl','Ridgewood Rd','Robbins Pl','Rolling Hills Ct','Rae Ann Dr','Ramona Way','Ranger Ct','Post Rd','Provo Ln','Pueblo Ct','Plaza Rd']},
-    ]},
-  { id:'blackhawk', name:'Blackhawk', color:'#f43f5e', tier:'A', avgHome:'$2.8M', weeks:'7', note:'Luxury gated — focus non-gated perimeter. Pair Sat with Danville same direction.',
-    neighborhoods:[
-      {name:'Blackhawk Perimeter / Hidden Oaks',days:'Mon–Wed Wk7',streets:['Blackhawk Rd','Blackhawk Dr','Hidden Oak Dr','Camino Tassajara','Sycamore Valley Rd','Deer Ridge Rd','Deer Ridge Dr','Deer Ridge Pl','Deer Trail Dr','Deer Trail Ct','Deer Trail Ln','Deer Hollow Dr','Deer Meadow Dr','Deer Meadow Ct','Deer Meadow Ln','Deer Meadow Pl','Deer Meadow Ter','Deer Oak Way','Deer Crest Dr','Deer Crest Pl','Deer Creek Ln','Deer Field Way','Amberfield Ln','Ambience Way','Almadine Way','Alta Vista Way','Alta Vista Ct','Abigail Cir']},
-      {name:'Summit Crest / Country Club',days:'Thu–Sat Wk7',streets:['Summit Crest Dr','Palomino Ct','Eagle Ct','Falcon Dr','Vista Grande Dr','Diablo Ranch Ct','Devonshire Ct','David Ln','Deepcreek Ct','Amelia Ln','Brooktree Dr','Charolais Ct','Tobiano Ct','Rassani Dr','Parkhaven Dr','Sweetpea Ct','Leafield Rd','Lawrence Rd','Carmenera St']},
-    ]},
-  { id:'lafayette', name:'Lafayette', color:'#34d399', tier:'B', avgHome:'$1.7M', weeks:'8–9', note:'Burton Valley most family-dense. Happy Valley highest value.',
-    neighborhoods:[
-      {name:'Burton Valley',days:'Mon–Wed Wk8',streets:['Burton Valley Rd','Reliez Valley Rd','Dolores Dr','Rancho Colorados Dr','Mariposa Ave','Via Contenta','Los Arabis Dr','La Fiesta Dr','Roble Rd','Loma Vista Dr','Loma Vista Ave','Pleasant Hill Rd','Springbrook Rd','Valle Vista Ave','Camino Diablo','Las Trampas Rd','Canon Dr','Withers Ave','Wilson Rd','Vine Hill Rd','Upper Happy Valley Rd','Franke Ln','Kendall Ln','Saranap Ave','Condit Rd','Bickerstaff Rd']},
-      {name:'Happy Valley / Springhill',days:'Thu–Sat Wk8',streets:['Happy Valley Rd','Springhill Rd','Merriewood Dr','Glen Rd','Crestview Dr','Estates Dr','Rose Ln','Mountain View Dr','Valley Vista Ln','Lucas Ranch Rd','Old Jonas Hill Rd','Canyon Rd','Oak Hill Rd','Deer Hill Rd','Risa Rd','El Nido Ranch Rd','Silver Springs Rd','Redwood Rd','Moraga Rd','Monticello Rd','Reliez Station Rd','Stonehedge Rd']},
-      {name:'Reliez Valley / Mt. Diablo Blvd',days:'Mon–Sat Wk9',streets:['Mt Diablo Blvd','Reliez Valley Rd','Boldt Dr','Las Trampas Rd','Pleasant Hill Rd','Hough Ave','Bell St','Acalanes Rd','Dewing Ave','Brown Ave','Walnut Blvd','Allen Ave','Cecilia Dr','Calle La Vuelta','Alamo Ave','El Camino Diablo','Camino Sobrante','Portola Dr','Golden Gate Way','School St','Alhambra Ave','Aster Ct','Brook St','Caminito Dr']},
-    ]},
-  { id:'orinda', name:'Orinda', color:'#fb923c', tier:'B', avgHome:'$1.8M', weeks:'10–11', note:'Older homes = perfect wash/window combo. Glorietta best density + value.',
-    neighborhoods:[
-      {name:'Glorietta',days:'Mon–Wed Wk10',streets:['Glorietta Blvd','Overhill Rd','Overhill Ct','Tarabrook Dr','Meadow View Rd','Owl Hill Rd','Owl Hill Ct','Oakwood Rd','Estates Dr','Southwood Dr','Brookwood Rd','Van Tassel Ln','Hillcrest Dr','Lombardy Ln','El Camino Moraga','Via Floreado','Tara Rd','Barbara Rd','Brookside Rd','La Cuesta Rd','Beatricia Rd','Las Cascades','Las Vegas Rd','Frontal Rd','Patricia Rd','Patrick Ln','Ravenhill Rd','Red Coach Ln','Oriole Rd','Parklane Dr']},
-      {name:'Orinda Village / Central Orinda',days:'Thu–Sat Wk10',streets:['Orinda Way','Camino Sobrante','La Espiral','San Pablo Dam Rd','Bates Blvd','Bates Ct','Miner Rd','Moraga Way','Camino Pablo','Davis Rd','Mira Loma Rd','Village Gate Rd','Santa Maria Way','Village View Ct','Martha Rd','Ironbark Cir','Knickerbocker Ln','Park Lane Dr','Evergreen Dr','Monterey Ter','Underhill Rd','Warford Ter','La Vuelta','Gateway Blvd','Via Hermosa','Lucille Way','Stein Way','La Campana Rd','Dos Posos','Bienvenida','Sally Ann Rd','Las Aromas']},
-      {name:'Sleepy Hollow / Orinda Oaks / North',days:'Mon–Sat Wk11',streets:['Sleepy Hollow Ln','Orindawoods Dr','Ivy Dr','Loma Vista Dr','Thornhill Dr','Altarinda Dr','Altarinda Cir','Altarinda Rd','E Altarinda Dr','St Stephens Dr','Camino Encinas','Oak Rd','Orchard Rd','Kite Hill Rd','Rich Acres Rd','Ridge Gate Rd','Ridge Ln','Robert Rd','Rose Ln','Roselle Ln','Rustic Way','Ardilla Rd','Ardith Ct','Ardith Dr','Ardor Dr','Ardor Ln','Aspinwall Ct','Bear Ridge Rd','Bear Ridge Ct','Brookbank Rd','Broadview Ter','Bryant Way','Candlestick Rd','Canyon View Dr','Carisbrook Dr','Cedar Ln','Cedar Ter']},
-    ]},
-  { id:'walnutcreek', name:'Walnut Creek', color:'#818cf8', tier:'A', avgHome:'$1.3M', weeks:'12–13', note:'Highest total door count. Northgate + Larkey Park best sub-neighborhoods.',
-    neighborhoods:[
-      {name:'Northgate / Arbolado',days:'Mon–Wed Wk12',streets:['Northgate Rd','Cherry Ln','Oak Grove Rd','Walnut Blvd','Bancroft Rd','Ygnacio Valley Rd','Arbolado Dr','Castle Rock Rd','Seven Hills Ranch Rd','Shadelands Dr','Shadowbrook Ct','Savannah Cir','Savannah Ct','Savoy Ct','Saxton Ct','School Ln','Scots Ct','Scots Ln','Sebastian Ln','Seccombe Ct','Selling Ct','Sellings Ct','Seneca Ct','Sequoia Ave','Sequoia Ln','Sequoia Ter','Serena Gardens','Shady Glen Rd','Shady Ln','Shamrock Dr','Shannon Ln','Sharene Ln','Sharp Ave','Sharpe Ave','Shasta Ln']},
-      {name:'Larkey Park / Lakewood / Walnut Heights',days:'Thu–Sat Wk12',streets:['Larkey Ln','Lakewood Dr','Treat Blvd','Walnut Knolls Dr','Olympic Blvd','Rudgear Rd','Rudgear Meadows Dr','Tice Valley Blvd','Shuey Ave','Riviera Ave','Overlook Dr','Summit Rd','Arroyo Way','Canyon Oak Rd','Meadow Creek Rd','Mitchell Dr','Sterling Ridge Dr','Pleasant Valley Rd','Coggins Dr','Marshall Dr','Marchbanks Dr','Brownstone Rd','Brenda Ln','Bates Blvd','Barker Rd','Bamboo Dr','Bailey Rd','Austris Ct','Avon Rd','Autumn Ln']},
-      {name:'Saranap / South WC / Tice Valley',days:'Mon–Sat Wk13',streets:['Saranap Ave','Boulevard Way','Danville Blvd','Camino Amigo','Paseo Nogal','La Paloma Rd','Sugarloaf Dr','Wild Oak Dr','Woodlands Dr','Somerset Dr','Sterling Ct','Sancho Rd','San Miguel Dr','San Marcos Dr','Lilac Dr','Livorna Estates Dr','Livorna Rd','Lafayette Valley Estates Dr','Joaquin Ranch Rd','Carriage Hills Dr','Carriage Square Dr','Blackwood Dr','Beacon Ridge Dr','Brooktree Rd','Bolton Dr','Bobwhite Ct','Blue Oak Ct','Birchwood Ct','Beverly Pl','Benson Dr','Bennett Ln']},
-    ]},
-  { id:'pleasanthill', name:'Pleasant Hill', color:'#94a3b8', tier:'C', avgHome:'$0.85M', weeks:'14', note:'Highest door count, lower avg ticket. Best for training or fill days.',
-    neighborhoods:[
-      {name:'Gregory Gardens / College Park',days:'Mon–Wed Wk14',streets:['Gregory Ln','Boyd Rd','Grayson Rd','Oak Park Blvd','Morello Ave','Vivian Dr','Annabel Ln','Paso Cerro','El Curtola Blvd','Vine Hill Rd','Contra Costa Blvd','Denkinger Rd','Patricia Rd','Drummond Ave','Margarita Dr','Linda Dr','Beverly Dr','Grandview Dr','Woodsworth Dr','Willow Pass Rd','Chilpancingo Pkwy','Paso Nogal','Coggins Dr','Hookston Rd','Pine Hollow Rd','Cleaveland Rd','Myrtle Dr','Barrington Rd','Brubeck Dr','Buskirk Ave','Butte Dr']},
-      {name:'Sun Valley / Ellinwood / DVC Area',days:'Thu–Sat Wk14',streets:['Wayne Dr','Ellinwood Dr','Sun Valley Dr','Camelback Rd','Longbrook Way','Golf Club Rd','Viera Ave','Taylor Blvd','Pacheco Blvd','Monument Blvd','Alhambra Ave','Alhambra Valley Rd','Arthur Rd','Appian Way','Dunning Ave','El Divisadero','Gregory Hills Dr','Geary Rd','Harris Ave','Hillside Dr','Jones Rd','Keller Ave','Las Juntas Way','Milbrae Ave','Minert Rd','Patterson Blvd','Primrose Dr','Putnam Blvd','Ridgewood Ave','Rolph Dr','Rosewood Dr']},
-    ]},
-];
-
-const PRICING=[{service:'Window Cleaning',color:'#3b82f6',rule:'SCREENS: $5/screen. Free screen cleaning ONLY if quote is $100+ above minimum tier. Default: customer removes own screens. Hard-to-reach = price reflects that.',rows:[{l:'10–20 windows',p:'$200 min',n:'Bump up if hard-to-reach'},{l:'20–30 windows',p:'$299 min',n:'Standard tier'},{l:'30–40 windows',p:'$399 min',n:'Standard tier'},{l:'40–50 windows',p:'$499 min',n:'Standard tier'}]},{service:'Solar Panel Cleaning',color:'#f59e0b',rows:[{l:'10–20 panels',p:'$149 min',n:'Entry tier'},{l:'20–30 panels',p:'$199 min',n:'Standard tier'},{l:'30–40 panels',p:'$249–$299',n:'Quote $299 first, drop to $249 only if needed'},{l:'50+ panels',p:'$349+ target up',n:'Larger arrays = price reflects time'}]},{service:'House Washing (Soft Wash)',color:'#22c55e',rule:'Rate range: 25¢–35¢/sqft. Always lead with higher end. Soft wash ONLY — no high pressure on siding.',rows:[{l:'1,500 sqft',p:'$599 min',n:'~40¢/sqft'},{l:'2,000 sqft',p:'$700',n:'~35¢/sqft'},{l:'3,000 sqft',p:'$900',n:'~30¢/sqft'},{l:'4,000 sqft',p:'$1,100',n:'~28¢/sqft'}]},{service:'Pressure Washing',color:'#a78bfa',rule:'Throw-in tactic: can throw in a small walkway as a freebie to lock the deal. Nothing bigger without approval.',rows:[{l:'One-car driveway',p:'$199',n:'Reference point'},{l:'Two-car driveway',p:'$250',n:'Reference point'},{l:'Patios / walkways',p:'~$0.25/sqft',n:'Measure and quote'}]},{service:'Gutter Cleaning',color:'#34d399',rule:'Default = pile debris on-site. Tell them: "I\'ll pile it neatly so your gardener can grab it." Only offer haul-away if dealbreaker.',rows:[{l:'Single-story standard',p:'$199',n:'Blowout'},{l:'Small home (2 gutters)',p:'$149',n:'Use only if pushed'},{l:'Two-story home',p:'$249 min / $349 target',n:'Lead with $349, drop to $249 if needed'},{l:'Debris haul-away (add-on)',p:'+$99',n:'Only if customer insists'}]},{service:'Roof Services',color:'#f43f5e',rows:[{l:'Roof blow-off (small home)',p:'$100 min',n:'Only for very small footprints'},{l:'Roof blow-off (standard)',p:'$199 min / $249 target',n:'Target up whenever possible'},{l:'Full roof soft wash',p:'$0.40–$0.50/sqft',n:'Includes moss scrubbing, gutter blowout, chemical soft wash'}]},{service:'Paver Resanding & Sealing',color:'#fb923c',rows:[{l:'Resanding & resealing',p:'$2.50–$3.50/sqft',n:'Book a quote — Andrew or lead comes out. Do NOT close on door.'}]}];
-
-const SCRIPT_SECTIONS=[{id:'setup',title:'Before You Knock',color:'#64748b',content:[{h:'Physical Setup',bullets:['AJ Home Services shirt on — visible branding','Clipboard or phone in hand — looks professional','Stand 1–2 steps back from door — less threatening','Feet shoulder width apart — grounded and confident','Hands visible — never in pockets','Smile before the door opens — it carries in your voice']},{h:'Know Before You Knock',bullets:['1–2 neighbor names from Jobber on this street','What services those neighbors booked','Rough home size — look at the house before knocking','If you just finished a job nearby — use that address','Phone charged — you will book and log on the spot','Business cards in pocket for every unanswered door']}]},{id:'opening',title:'Step 1 — The Opening',color:'#22d3ee',content:[{h:'Standard Opening',quote:'"Hey, how\'s it going? I\'m [Name] with AJ Home Services. We\'re actually working on a few homes on your street this week — we just finished [neighbor]\'s place down the block and we\'ve got a couple more tomorrow. We do everything on the exterior — house washing, gutters, windows, solar panels, pressure washing, roof cleaning. While we\'re already set up out here we have some availability and we\'re offering a group rate to neighbors. Is there anything on the exterior you\'ve been meaning to get taken care of?"',cue:'Point down the street toward the neighbor\'s house when you say their name. Make eye contact when you ask the question.'},{h:'Power Version — Just Finished Nearby',quote:'"Hey — I\'m [Name] with AJ Home Services. We literally just finished [neighbor]\'s place right there — [point]. You can probably see the difference from here. While the crew is still set up on your street I wanted to see if there\'s anything we could take care of for you too. What\'s the biggest thing you\'ve been wanting to get done out here?"',cue:'Point directly at the finished house. Let them look. Pause. Then turn back and make eye contact.',note:'Power version converts 2–3x better. Always knock the 5 nearest houses immediately after finishing a job — do not wait.'}]},{id:'qualify',title:'Step 2 — The Qualifying Question',color:'#a78bfa',content:[{h:'If they\'re interested but unsure',quote:'"Let me ask you — when you look at the outside of your house, what bothers you most? Is it the exterior itself, the windows, the gutters, the driveway — or is there something specific you\'ve been putting off?"',cue:'Casually glance around their property. If you spot something obvious, point to it: "I can see your gutters have some buildup up there — is that something on your radar?"',note:'Once they answer, go straight to the matching service branch. Their answer is your roadmap.'}]},{id:'branches',title:'Step 3 — Service Branches',color:'#f59e0b',content:[{h:'1. House Washing / Soft Washing',quote:'"Perfect — that\'s actually what we\'ve been doing all week on your street. We do a soft wash which is way more effective than a regular pressure washer on siding — it gets into the pores and kills the mold and mildew at the root so it stays clean way longer. For a home your size with the group rate we\'re looking at about $[sq ft x $0.30]. You don\'t even need to be home — we text you before and after with photos."',bundle:'While the crew is up on the house anyway — when did you last have the gutters cleared? I can bundle that in for $[gutter price] and you save yourself a separate call later.'},{h:'2. Gutter Cleaning',quote:'"Yeah gutters are one of those things that are easy to forget until they start causing real problems — once they overflow it backs up under the roofline and into the fascia boards. Expensive fix. We go up, completely clear everything out, flush the downspouts, and rinse the roofline. For a home your size with the group rate we\'re at about $[price]. Takes about an hour, crew handles everything."',bundle:'Since the crew is already going to be up on ladders — is the exterior of the house something you\'d want handled at the same time? Most people bundle the house wash and gutters together. One visit, better price.'},{h:'3. Window Cleaning',quote:'"Windows make such a big difference — it changes how the whole house looks from the outside and how much light you get inside. We do full exterior cleaning, tracks, and screens. For hard water stains we have a treatment that removes the mineral buildup that regular cleaning can\'t touch. For a home your size we\'re at about $[price] with the group rate. Usually takes 1–2 hours."',bundle:'If you have solar panels — dirty windows and dirty panels are basically the same problem. We can do both at the same time and I can knock a bit more off. Do you have solar?'},{h:'4. Solar Panel Cleaning',quote:'"Solar panels lose 15–25% of their efficiency when they get dirty — dust, pollen, bird droppings. Most people don\'t realize how much it\'s actually affecting their energy bill. We use a deionized water system that won\'t scratch the panels or void your warranty. For a typical residential system with the group rate it\'s about $[price]. Takes about 45 minutes and you\'ll notice it on your next bill."',bundle:'While we\'re up on the roof area — are the gutters something that needs attention too? Same debris landing on the panels usually means the gutters have buildup as well.'},{h:'5. Pressure Washing',quote:'"Yeah the driveway and concrete are something people notice a lot — it affects how the whole property looks from the street. We do a hot water pressure wash that gets deep into the pores of the concrete and lifts the staining and oil out. For a standard driveway with the group rate we\'re looking at $[price]. If you want sealing done after we can take care of that too — it protects the surface and keeps it clean way longer."',bundle:'And if the house exterior is something you\'ve been thinking about too — soft washing the house and doing the driveway together is a really popular combo.'},{h:'6. Roof Cleaning',quote:'"Those black streaks are actually a bacteria called gloeocapsa magma — it feeds on the limestone in your shingles and spreads over time. Left alone it shortens the life of your roof by years. We do a low pressure soft wash treatment that kills it at the root — same method roofing manufacturers recommend. It won\'t void your warranty and the results last 2–3 years. For a home your size with the group rate we\'re looking at $[price]."',bundle:'While we\'re up there — the gutters are worth checking too. That same debris causing the roof streaking usually ends up in the gutters. I can bundle that in and the crew handles both in one visit.'},{h:'7. Soft Washing — Siding / Fences / Stucco',quote:'"Soft washing is different from a pressure washer — it uses a low pressure application with a solution that kills the mold and algae at the root rather than just blasting the surface. It\'s actually safer for painted surfaces, stucco, and wood, and it stays cleaner longer because you\'re killing the source not just the surface layer. For a fence or surface your size with the group rate we\'re looking at about $[price]."',bundle:'And if the house exterior needs attention too — soft washing the whole property as a package is usually the way to go. Want me to give you a price for the full exterior while I\'m here?'}]},{id:'close',title:'Step 4 — The Close',color:'#22c55e',content:[{h:'Two-option close — use after every pitch',quote:'"So did you want to go ahead and get that locked in? I can get you on the schedule for this week while we\'re already in the neighborhood. What works better — tomorrow or later in the week?"',cue:'Plant your feet. Hold eye contact with a relaxed, expectant expression. The silence after this question is part of the close — do not fill it. First person to speak loses.',note:''},{h:'If they hesitate on the bundle',quote:'"Totally fine — even if you just want to start with the [primary service] today and we come back for the rest, that works too. Want to at least lock in the [primary service] while the group rate is available?"',note:'One service booked is infinitely better than zero. Never leave empty-handed if there is any interest at all.'}]},{id:'objections',title:'Step 5 — Smokescreen Objections',color:'#f43f5e',content:[{h:'What is a smokescreen?',quote:'A smokescreen is a polite way of saying no without saying no. Your job is to ask one more genuine question to find the real barrier.',note:'Universal buster: "Hey — totally respect that. Can I ask honestly — is it a hard no or more of a not right now?"'},{h:'"I need to think about it"',quote:'Buster: "Totally get that — most people say the same thing honestly. Can I ask — is it more about the timing, the price, or just not sure if you need it done right now? I want to make sure I answered everything before I leave."',cue:'Stay planted. Do not back up or reach for a card yet.',follow:'If it\'s price: "I hear you — the group rate is the best I can do while we\'re on your street. If it helps I can break it into two visits so it\'s not all at once. Would that make it easier?"'},{h:'"Send me some info"',quote:'Buster: "Of course — what\'s the best number? I\'ll text you right now so you have it. And honestly the best way to see our work is the before and after photos — let me pull one up real quick."',cue:'Pull out your phone and hold it toward them — not shoving it in their face, just angling it so they can see.',follow:'After they see photos: "Pretty dramatic right? That\'s a house two streets over we did last month. Is that the kind of result you\'d want for yours? Because I can get you on the schedule this week while we\'re already out here."'},{h:'"I have to ask my spouse"',quote:'Buster: "Absolutely makes sense. Is he/she home right now? I can take two minutes to walk you both through it. Or honestly a lot of couples just do a quick text — want to shoot them a message right now while I\'m here?"',cue:'When you suggest texting the spouse, pull out your own phone and hold it up casually — normalizes the action.',follow:'If spouse isn\'t home: "No problem at all. Let me text you the details right now so you can show them. And can I ask — when do you think you\'d have a chance to chat about it?" [Get a specific day, follow up exactly then.]'},{h:'"We already have someone"',quote:'Buster: "Oh nice — who do you use? [Listen genuinely.] How have they been? Are you happy with them?"',cue:'Lean against the door frame — relaxed posture signals you\'re not threatened. Curiosity, not defensiveness.',follow:'If they hesitate: "I ask because a lot of our clients switched to us after having some inconsistency with their previous company. We document everything with before and after photos on every single job and the owner personally follows up after each visit."'},{h:'"Not right now / maybe later"',quote:'Buster: "Totally understand — when do you think you\'d want to get it done? Summer? Fall? I ask because our schedule fills up fast in peak season and I want to make sure we can get you in."',cue:'When they give a timeframe, write it down visibly on your clipboard or phone.',follow:'If they give a timeframe: "Perfect — what if I reach out in [month they said]? I\'ll put you on our early booking list so you get priority scheduling. What\'s the best number?" [Get their number. Set a Jobber reminder.]'}]},{id:'after',title:'Step 6 — After Every Door',color:'#818cf8',content:[{h:'If they book',bullets:['Get name, number, best day and time','Log in Jobber immediately — do not wait','Confirm text to client within 5 minutes','Knock the 4–5 nearest neighbors right now','Tell manager so crew is scheduled']},{h:'If they don\'t book',bullets:['Leave a business card — every single time','If they gave a number — follow up in 2 days','If they gave a timeframe — set a Jobber reminder','Note address in your daily tracker','Walk away cleanly — never linger or look defeated']}]}];
-
-// ── HELPERS ───────────────────────────────────────────────────────
-function getZ() { return ZONES[activeZoneIdx]; }
-function getNb() { return getZ().neighborhoods[activeNbIdx]; }
-function getStreets() { const z=getZ(),nb=getNb(),k=z.id+'|'+nb.name; return [...nb.streets,...(state.extra[k]||[])]; }
-function stOf(zId,nbName,s) { return state.status[zId+'|'+nbName+'|'+s]; }
-function calcZone(z) {
-  let total=0,done=0,skip=0;
-  for(const nb of z.neighborhoods){
-    const all=[...nb.streets,...(state.extra[z.id+'|'+nb.name]||[])];
-    total+=all.length;
-    done+=all.filter(s=>state.status[z.id+'|'+nb.name+'|'+s]==='done').length;
-    skip+=all.filter(s=>state.status[z.id+'|'+nb.name+'|'+s]==='skip').length;
-  }
-  return {total,done,skip,remaining:total-done-skip};
-}
-function calcNb(zId,nb) {
-  const all=[...nb.streets,...(state.extra[zId+'|'+nb.name]||[])];
-  return {total:all.length,done:all.filter(s=>state.status[zId+'|'+nb.name+'|'+s]==='done').length,skip:all.filter(s=>state.status[zId+'|'+nb.name+'|'+s]==='skip').length};
-}
-function calcReps() {
-  const r={};
-  for(const e of state.log){
-    if(!e.rep||e.rep==='Unknown') continue;
-    if(!r[e.rep]) r[e.rep]={done:0,skip:0,ts:0,zone:'',date:'',time:''};
-    if(e.action==='done') r[e.rep].done++;
-    if(e.action==='skip') r[e.rep].skip++;
-    if((e.timestamp||0)>r[e.rep].ts){r[e.rep].ts=e.timestamp||0;r[e.rep].zone=e.zone;r[e.rep].date=e.date;r[e.rep].time=e.time;}
-  }
-  return r;
+function makeColl(title,titleColor,bodyHtml){
+  var wrap=document.createElement('div');wrap.className='coll';
+  var btn=document.createElement('button');btn.className='cb';btn.style.width='100%';
+  var ts=document.createElement('span');ts.style.color=titleColor;ts.textContent=title;btn.appendChild(ts);
+  var arr=document.createElement('span');arr.style.cssText='font-size:11px;color:#444';arr.textContent='[+]';btn.appendChild(arr);
+  var body=document.createElement('div');body.className='cbd';body.innerHTML=bodyHtml;
+  btn.addEventListener('click',function(){var open=body.style.display==='block';body.style.display=open?'none':'block';arr.textContent=open?'[+]':'[-]';});
+  wrap.appendChild(btn);wrap.appendChild(body);
+  return wrap;
 }
 
-// ── LOAD / SAVE ───────────────────────────────────────────────────
-async function loadData() {
-  setSyncStatus('syncing');
-  const [s,e,l] = await Promise.all([dbGet('knock_status'),dbGet('knock_extra'),dbGet('knock_log')]);
-  if(s&&typeof s==='object') state.status=s;
-  if(e&&typeof e==='object') state.extra=e;
-  if(l&&Array.isArray(l)) state.log=l;
-  setSyncStatus('ok');
-  renderAll();
-}
-async function saveStatus() {
-  await dbSet('knock_status',state.status);
-  showSaveOk();
-}
-async function saveExtra() { await dbSet('knock_extra',state.extra); }
-async function saveLog()   { await dbSet('knock_log',state.log); }
-
-function setSyncStatus(s) {
-  const el=document.getElementById('sync-status');
-  if(!el) return;
-  if(s==='syncing'){el.textContent='⟳ syncing';el.className='syncing';}
-  else if(s==='ok'){el.textContent='● '+new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});el.className='ok';}
-}
-function showSaveOk() {
-  const el=document.getElementById('sync-status');
-  if(!el) return;
-  el.textContent='✓ saved'; el.className='ok';
-  clearTimeout(saveTimer);
-  saveTimer=setTimeout(()=>setSyncStatus('ok'),2000);
-}
-
-// ── AUTH ──────────────────────────────────────────────────────────
-document.getElementById('pw-input').addEventListener('keydown',e=>{if(e.key==='Enter')checkPw();});
-function checkPw() {
-  const v=document.getElementById('pw-input').value;
-  if(v===APP_PW){
-    document.getElementById('login-screen').style.display='none';
-    document.getElementById('app').style.display='flex';
-    if(!repName) showRepModal();
-    loadData();
-    setInterval(loadData,15000);
-  } else {
-    document.getElementById('pw-error').style.display='block';
-    document.getElementById('pw-input').classList.add('err');
-    document.getElementById('pw-input').value='';
-  }
-}
-function showRepModal() {
-  document.getElementById('rep-modal').style.display='flex';
-  setTimeout(()=>document.getElementById('rep-input').focus(),100);
-}
-document.getElementById('rep-input').addEventListener('keydown',e=>{if(e.key==='Enter')saveRep();});
-function saveRep() {
-  const v=document.getElementById('rep-input').value.trim();
-  if(!v) return;
-  repName=v;
-  localStorage.setItem('ajhs_rep6',v);
-  document.getElementById('rep-modal').style.display='none';
-  document.getElementById('rep-display').textContent=v;
-}
-function onManagerTab() {
-  if(pinUnlocked){switchView('manager');return;}
-  document.getElementById('pin-modal').style.display='flex';
-  setTimeout(()=>document.getElementById('pin-input').focus(),100);
-}
-document.getElementById('pin-input').addEventListener('keydown',e=>{if(e.key==='Enter')checkPin();});
-function checkPin() {
-  if(document.getElementById('pin-input').value===MGR_PIN){
-    pinUnlocked=true;
-    document.getElementById('tab-manager').textContent='📊🔓';
-    closePinModal();
-    switchView('manager');
-  } else {
-    document.getElementById('pin-error').style.display='block';
-    document.getElementById('pin-input').value='';
-  }
-}
-function closePinModal() {
-  document.getElementById('pin-modal').style.display='none';
-  document.getElementById('pin-input').value='';
-  document.getElementById('pin-error').style.display='none';
-}
-
-// ── VIEW SWITCHING ────────────────────────────────────────────────
-function switchView(v) {
-  currentView=v;
-  ['field','resources','manager'].forEach(x=>{
-    document.getElementById('view-'+x).style.display= x===v?(x==='field'?'flex':'block'):'none';
-    const tab=document.getElementById('tab-'+x);
-    if(tab) tab.classList.toggle('active',x===v);
+function buildResources(){
+  var rp=g('rp');rp.innerHTML='';
+  var gd=document.createElement('div');gd.className='gold';gd.innerHTML='<b>GOLDEN RULE</b>Always quote the full price first. The bundle discount is your closing tool - never your opening offer. If a homeowner pushes back, that is when you bring out the $50 bundle.';rp.appendChild(gd);
+  var svcs=[{"id": "win", "title": "Window Cleaning", "color": "#3b82f6", "rows": [["10-20 windows", "$200 min", "Bump up if hard-to-reach"], ["20-30 windows", "$299 min", "Standard tier"], ["30-40 windows", "$399 min", "Standard tier"], ["40-50 windows", "$499 min", "Standard tier"]], "note": "SCREENS: $5 per screen. Free screen cleaning ONLY if quote is $100+ above minimum. Default: customer removes own screens."}, {"id": "sol", "title": "Solar Panel Cleaning", "color": "#f59e0b", "rows": [["10-20 panels", "$149 min", "Entry tier"], ["20-30 panels", "$199 min", "Standard tier"], ["30-40 panels", "$249-$299", "Quote $299 first, drop only if needed"], ["50+ panels", "$349+ target up", "Larger arrays reflect time"]]}, {"id": "hws", "title": "House Washing Soft Wash", "color": "#22c55e", "rows": [["1500 sqft", "$599 min", "~40 cents/sqft"], ["2000 sqft", "$700", "~35 cents/sqft"], ["3000 sqft", "$900", "~30 cents/sqft"], ["4000 sqft", "$1100", "~28 cents/sqft"]], "note": "Rate range 25-35 cents/sqft. Always lead with higher end. Soft wash ONLY on siding."}, {"id": "pw", "title": "Pressure Washing", "color": "#a78bfa", "rows": [["One-car driveway", "$199", "Reference point"], ["Two-car driveway", "$250", "Reference point"], ["Patios/walkways", "~$0.25/sqft", "Measure and quote"]], "note": "Can throw in a small walkway as freebie to lock the deal. Nothing bigger without approval."}, {"id": "gut", "title": "Gutter Cleaning", "color": "#34d399", "rows": [["Single-story standard", "$199", "Blowout"], ["Small home 2 gutters", "$149", "Use only if pushed"], ["Two-story home", "$249 min / $349 target", "Lead with $349"], ["Debris haul-away", "+$99", "Only if customer insists"]], "note": "Default = pile debris on-site. I will pile it neatly so your gardener can grab it."}, {"id": "roof", "title": "Roof Services", "color": "#f43f5e", "rows": [["Roof blow-off small", "$100 min", "Very small footprints"], ["Roof blow-off standard", "$199 min / $249 target", "Target up"], ["Full roof soft wash", "$0.40-$0.50/sqft", "Includes moss scrubbing"]]}, {"id": "pav", "title": "Paver Resanding and Sealing", "color": "#fb923c", "rows": [["Resanding and resealing", "$2.50-$3.50/sqft", "Book a quote. Do NOT close on door."]]}];
+  svcs.forEach(function(sv){
+    var tbl='<table class="pt"><tr><th>SIZE</th><th>PRICE</th><th>NOTE</th></tr>';
+    sv.rows.forEach(function(r){tbl+='<tr><td style="color:#aaa;width:33%">'+r[0]+'</td><td style="font-weight:700;color:'+sv.color+';width:28%">'+r[1]+'</td><td style="font-size:9px;color:#555">'+r[2]+'</td></tr>';});
+    tbl+='</table>';
+    if(sv.note)tbl+='<div class="pex">'+sv.note+'</div>';
+    rp.appendChild(makeColl(sv.title,sv.color,tbl));
   });
-  if(v==='manager') renderManager();
-}
-function switchResTab(t) {
-  currentResTab=t;
-  ['pricing','script'].forEach(x=>{
-    document.getElementById('res-'+x).style.display=x===t?'block':'none';
-    document.getElementById('res-tab-'+x).classList.toggle('active',x===t);
-  });
-}
+  var bb='<div style="font-size:10px;color:#777;margin-bottom:10px;line-height:1.5">Quote both services at full price first. If they hesitate: If we book both today I can knock $50 off the total. Make them earn it.</div>'+
+'<div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #141414"><span style="font-size:10px;color:#888">Any 2 services booked together</span><span style="font-size:10px;font-weight:700;color:#f59e0b">$50 off</span></div>'+
+'<div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #141414"><span style="font-size:10px;color:#888">High-ticket bundle well above min</span><span style="font-size:10px;font-weight:700;color:#f59e0b">Up to $100 off</span></div>'+
+'<div style="display:flex;justify-content:space-between;padding:5px 0"><span style="font-size:10px;color:#888">Anything beyond $100 off</span><span style="font-size:10px;font-weight:700;color:#f59e0b">Manager approval required</span></div>'+
+'<div style="display:flex;gap:10px;margin-top:12px"><div style="flex:1"><div style="font-size:9px;font-weight:700;color:#22c55e;margin-bottom:5px">DO</div>'+
+['Quote full price first','Lead with higher end','Use bundle only when closing','Make customer earn it','Charge for hard-to-reach','Confirm screen liability'].map(function(d){return '<div style="font-size:9px;color:#1a4a1a;line-height:1.7">+ '+d+'</div>';}).join('')+
+'</div><div style="flex:1"><div style="font-size:9px;font-weight:700;color:#ef4444;margin-bottom:5px">DONT</div>'+
+['Open with bundle price','Drop below minimums','Throw in haul-away free','Quote pavers on door','Discount the discount','Promise free screens unless $100+ above min'].map(function(d){return '<div style="font-size:9px;color:#4a1a1a;line-height:1.7">- '+d+'</div>';}).join('')+
+'</div></div>';
+  rp.appendChild(makeColl('Bundle Discounts - Closing Tool','#f59e0b',bb));
 
-// ── RENDER ALL ────────────────────────────────────────────────────
-function renderAll() {
-  renderHeader();
-  renderZoneTabs();
-  renderZoneMeta();
-  renderSidebar();
-  renderStreets();
-  renderBottomBar();
-  document.getElementById('rep-display').textContent=repName;
+  var rs=g('rs');rs.innerHTML='';
+  var secs=[{"id": "setup", "title": "Before You Knock", "color": "#64748b", "html": "<div class=\"sh4\" style=\"color:#64748b\">Physical Setup</div><div class=\"sbul\">+ AJ Home Services shirt on - visible branding</div><div class=\"sbul\">+ Clipboard or phone in hand</div><div class=\"sbul\">+ Stand 1-2 steps back from door</div><div class=\"sbul\">+ Feet shoulder width apart</div><div class=\"sbul\">+ Hands visible - never in pockets</div><div class=\"sbul\">+ Smile before the door opens</div><div class=\"sh4\" style=\"color:#64748b\">Know Before You Knock</div><div class=\"sbul\">+ 1-2 neighbor names from Jobber</div><div class=\"sbul\">+ What services those neighbors booked</div><div class=\"sbul\">+ Phone charged - book and log on the spot</div><div class=\"sbul\">+ Business cards for every unanswered door</div>"}, {"id": "open", "title": "Step 1 - The Opening", "color": "#22d3ee", "html": "<div class=\"sh4\" style=\"color:#22d3ee\">Standard Opening</div><div class=\"sq\">Hey, how is it going? I am [Name] with AJ Home Services. We are actually working on a few homes on your street this week - we just finished [neighbor] place down the block. We do everything on the exterior - house washing, gutters, windows, solar panels, pressure washing, roof cleaning. While we are already set up out here we have some availability and we are offering a group rate to neighbors. Is there anything on the exterior you have been meaning to get taken care of?</div><div class=\"sc\">Point down the street toward the neighbor house. Make eye contact when you ask the question.</div><div class=\"sh4\" style=\"color:#22d3ee\">Power Version - Just Finished Nearby</div><div class=\"sq\">Hey - I am [Name] with AJ Home Services. We literally just finished [neighbor] place right there. You can probably see the difference from here. While the crew is still set up on your street I wanted to see if there is anything we could take care of for you too. What is the biggest thing you have been wanting to get done out here?</div><div class=\"sn\">Power version converts 2-3x better. Always knock the 5 nearest houses immediately after finishing a job.</div>"}, {"id": "qual", "title": "Step 2 - Qualifying Question", "color": "#a78bfa", "html": "<div class=\"sq\">Let me ask you - when you look at the outside of your house, what bothers you most? Is it the exterior itself, the windows, the gutters, the driveway - or is there something specific you have been putting off?</div><div class=\"sc\">Casually glance around their property. If you spot something obvious, point to it.</div><div class=\"sn\">Once they answer, go straight to the matching service branch. Their answer is your roadmap.</div>"}, {"id": "branch", "title": "Step 3 - Service Branches", "color": "#f59e0b", "html": "<div class=\"sh4\" style=\"color:#f59e0b\">1. House Washing</div><div class=\"sq\">Perfect - that is actually what we have been doing all week on your street. We do a soft wash which is way more effective than a regular pressure washer on siding - it gets into the pores and kills the mold and mildew at the root so it stays clean way longer. For a home your size with the group rate we are looking at about $[price].</div><div class=\"sbun\">Bundle: While the crew is up on the house anyway - when did you last have the gutters cleared? I can bundle that in and you save yourself a separate call later.</div><div class=\"sh4\" style=\"color:#f59e0b\">2. Gutter Cleaning</div><div class=\"sq\">Yeah gutters are easy to forget until they start causing real problems - once they overflow it backs up under the roofline into the fascia boards. Expensive fix. We go up, clear everything out, flush the downspouts, and rinse the roofline. For a home your size with the group rate we are at about $[price]. Takes about an hour.</div><div class=\"sbun\">Bundle: Since the crew is already going to be up on ladders - is the exterior of the house something you would want handled at the same time?</div><div class=\"sh4\" style=\"color:#f59e0b\">3. Window Cleaning</div><div class=\"sq\">Windows make such a big difference. We do full exterior cleaning, tracks, and screens. For hard water stains we have a treatment that removes the mineral buildup that regular cleaning cannot touch. For a home your size we are at about $[price] with the group rate.</div><div class=\"sbun\">Bundle: If you have solar panels - dirty windows and dirty panels are basically the same problem. Do you have solar?</div><div class=\"sh4\" style=\"color:#f59e0b\">4. Solar Panel Cleaning</div><div class=\"sq\">Solar panels lose 15-25% of their efficiency when they get dirty. Most people do not realize how much it is affecting their energy bill. We use a deionized water system that will not scratch the panels or void your warranty. For a typical residential system it is about $[price].</div><div class=\"sbun\">Bundle: While we are up on the roof area - are the gutters something that needs attention too?</div><div class=\"sh4\" style=\"color:#f59e0b\">5. Pressure Washing</div><div class=\"sq\">Yeah the driveway and concrete are something people notice a lot. We do a hot water pressure wash that gets deep into the pores and lifts the staining and oil out. For a standard driveway with the group rate we are looking at $[price].</div><div class=\"sbun\">Bundle: And if the house exterior is something you have been thinking about too - soft washing the house and doing the driveway together is a really popular combo.</div><div class=\"sh4\" style=\"color:#f59e0b\">6. Roof Cleaning</div><div class=\"sq\">Those black streaks are actually a bacteria called gloeocapsa magma. Left alone it shortens the life of your roof by years. We do a low pressure soft wash treatment that kills it at the root. Results last 2-3 years. For a home your size we are looking at $[price].</div><div class=\"sbun\">Bundle: While we are up there - the gutters are worth checking too.</div>"}, {"id": "close", "title": "Step 4 - The Close", "color": "#22c55e", "html": "<div class=\"sq\">So did you want to go ahead and get that locked in? I can get you on the schedule for this week while we are already in the neighborhood. What works better - tomorrow or later in the week?</div><div class=\"sc\">Plant your feet. Hold eye contact. The silence after this question is part of the close - do not fill it. First person to speak loses.</div><div class=\"sh4\" style=\"color:#22c55e\">If they hesitate</div><div class=\"sq\">Totally fine - even if you just want to start with the [primary service] today and we come back for the rest, that works too. Want to at least lock in the [primary service] while the group rate is available?</div><div class=\"sn\">One service booked is infinitely better than zero. Never leave empty-handed if there is any interest at all.</div>"}, {"id": "obj", "title": "Step 5 - Smokescreen Objections", "color": "#f43f5e", "html": "<div style=\"font-size:10px;color:#555;margin-bottom:10px;line-height:1.5\">A smokescreen is a polite way of saying no without saying no. Ask one more question to find the real barrier.</div><div class=\"sn\">Universal buster: Hey - totally respect that. Can I ask honestly - is it a hard no or more of a not right now?</div><div class=\"sh4\" style=\"color:#f43f5e\">I need to think about it</div><div class=\"sq\">Totally get that. Can I ask - is it more about the timing, the price, or just not sure if you need it done right now? I want to make sure I answered everything before I leave.</div><div class=\"sfo\">If price: I hear you - the group rate is the best I can do while we are on your street. If it helps I can break it into two visits.</div><div class=\"sh4\" style=\"color:#f43f5e\">Send me some info</div><div class=\"sq\">Of course - what is the best number? I will text you right now so you have it. And honestly the best way to see our work is the before and after photos - let me pull one up real quick.</div><div class=\"sfo\">After photos: Pretty dramatic right? That is a house two streets over. Is that the kind of result you would want?</div><div class=\"sh4\" style=\"color:#f43f5e\">I have to ask my spouse</div><div class=\"sq\">Absolutely makes sense. Is he/she home right now? I can take two minutes to walk you both through it. Or a lot of couples just do a quick text - want to shoot them a message right now while I am here?</div><div class=\"sfo\">If not home: Let me text you the details right now. When do you think you would have a chance to chat about it? Get a specific day and follow up exactly then.</div><div class=\"sh4\" style=\"color:#f43f5e\">We already have someone</div><div class=\"sq\">Oh nice - who do you use? How have they been? Are you happy with them?</div><div class=\"sfo\">If they hesitate: A lot of our clients switched to us after having some inconsistency. We document everything with before and after photos.</div><div class=\"sh4\" style=\"color:#f43f5e\">Not right now / maybe later</div><div class=\"sq\">Totally understand - when do you think you would want to get it done? Summer? Fall? I ask because our schedule fills up fast in peak season.</div><div class=\"sfo\">If timeframe: Perfect - what if I reach out in that month? I will put you on our early booking list. What is the best number?</div>"}, {"id": "after", "title": "Step 6 - After Every Door", "color": "#818cf8", "html": "<div class=\"sh4\" style=\"color:#818cf8\">If they book</div><div class=\"sbul\">+ Get name, number, best day and time</div><div class=\"sbul\">+ Log in Jobber immediately</div><div class=\"sbul\">+ Confirm text within 5 minutes</div><div class=\"sbul\">+ Knock the 4-5 nearest neighbors right now</div><div class=\"sbul\">+ Tell manager so crew is scheduled</div><div class=\"sh4\" style=\"color:#818cf8\">If they dont book</div><div class=\"sbul\">+ Leave a business card every time</div><div class=\"sbul\">+ If they gave a number - follow up in 2 days</div><div class=\"sbul\">+ If they gave a timeframe - set a Jobber reminder</div><div class=\"sbul\">+ Walk away cleanly - never linger</div>"}];
+  secs.forEach(function(sec){rs.appendChild(makeColl(sec.title,sec.color,sec.html));});
 }
 
-function renderHeader() {
-  const tot=ZONES.reduce((a,z)=>a+calcZone(z).total,0);
-  const done=ZONES.reduce((a,z)=>a+calcZone(z).done,0);
-  const pct=tot>0?Math.round(done/tot*100):0;
-  document.getElementById('hdr-stats').innerHTML=`${tot} streets · <span>${done} knocked (${pct}%)</span>`;
-}
-
-function renderZoneTabs() {
-  const el=document.getElementById('zone-tabs');
-  el.innerHTML=ZONES.map((z,i)=>{
-    const s=calcZone(z);
-    const pct=s.total>0?Math.round(s.done/s.total*100):0;
-    return `<button style="--zc:${z.color}" class="${i===activeZoneIdx?'active':''}" onclick="selectZone(${i})"><span style="font-size:7px;color:${z.color};opacity:.4;margin-right:3px">W${z.weeks}</span>${z.name}${pct>0?`<span style="margin-left:4px;font-size:7px;color:${pct===100?'#22c55e':z.color}">${pct}%</span>`:''}</button>`;
-  }).join('');
-}
-
-function renderZoneMeta() {
-  const z=getZ();
-  document.getElementById('zone-meta').style.background=z.color+'07';
-  document.getElementById('zone-meta').style.borderBottomColor=z.color+'15';
-  document.getElementById('zone-meta').innerHTML=`
-    <div class="meta-item"><span class="meta-label">WK</span><span class="meta-val" style="color:${z.color}">${z.weeks}</span></div>
-    <div class="meta-item"><span class="meta-label">AVG</span><span class="meta-val" style="color:#aaa">${z.avgHome}</span></div>
-    <div class="meta-item"><span class="meta-label">TIER</span><span class="meta-val" style="color:${{A:'#22c55e',B:'#f59e0b',C:'#64748b'}[z.tier]}">${z.tier}</span></div>
-    <div class="note">${z.note}</div>`;
-}
-
-function renderSidebar() {
-  const z=getZ();
-  let html=z.neighborhoods.map((nb,i)=>{
-    const s=calcNb(z.id,nb);
-    const pct=s.total>0?((s.done+s.skip)/s.total*100):0;
-    return `<div class="nb-item ${i===activeNbIdx?'active':''}" style="--zc:${z.color}" onclick="selectNb(${i})">
-      <div class="nb-name">${nb.name}</div>
-      <div class="nb-days">${nb.days}</div>
-      <div class="nb-stat">${s.done}/${s.total} · ${s.skip} skip</div>
-      ${pct>0?`<div class="nb-progress"><div class="nb-progress-fill" style="width:${pct}%;background:${z.color}60"></div></div>`:''}
-    </div>`;
-  }).join('');
-  html+=`<div class="recent-label">RECENT</div>`;
-  html+=state.log.slice(0,6).map(e=>`<div class="log-item"><div class="li-rep" style="color:#282828"><span style="color:#383838;font-weight:700">${e.rep}</span> <span style="color:${e.action==='done'?'#1a4a1a':e.action==='skip'?'#4a1a1a':'#2a2a2a'}">${e.action}</span></div><div class="li-street">${e.street} · ${e.time}</div></div>`).join('');
-  document.getElementById('nb-sidebar').innerHTML=html;
-}
-
-function renderStreets() {
-  const z=getZ(), nb=getNb(), streets=getStreets();
-  let html=`<div class="street-header"><h3>${nb.name}</h3><div class="sh-meta">📆 ${nb.days} · ${streets.length} streets</div><div class="street-hint">✓ knocked full street &nbsp;·&nbsp; ✗ skip (flags for Andrew)</div></div><div class="streets-list">`;
-  streets.forEach((s,i)=>{
-    const isAdded=i>=nb.streets.length;
-    const val=stOf(z.id,nb.name,s);
-    const done=val==='done', skip=val==='skip';
-    const k=z.id+'|'+nb.name+'|'+s;
-    const open=expandedStreet===k;
-    html+=`<div class="street-row ${done?'done':skip?'skip':''}" id="sr-${i}">
-      <div class="sr-inner" onclick="toggleExpand('${k}')">
-        <div class="street-num" style="color:${z.color}">${String(i+1).padStart(2,'0')}</div>
-        <div class="street-name">${s}${isAdded?'<span class="added-badge">ADDED</span>':''}</div>
-        <div class="sr-btns" onclick="event.stopPropagation()">
-          <button class="sr-btn done-btn ${done?'active':''}" onclick="toggleStreet('${z.id}','${nb.name.replace(/'/g,"\\'")}','${s.replace(/'/g,"\\'")}','done')">✓</button>
-          <button class="sr-btn skip-btn ${skip?'active':''}" onclick="toggleStreet('${z.id}','${nb.name.replace(/'/g,"\\'")}','${s.replace(/'/g,"\\'")}','skip')">✗</button>
-          ${isAdded?`<button class="sr-btn del-btn" onclick="removeStreet('${z.id}','${nb.name.replace(/'/g,"\\'")}','${s.replace(/'/g,"\\'")}')">🗑</button>`:''}
-        </div>
-      </div>
-      ${open?`<div class="sr-detail"><div>• Knock every single-family home on ${s} end to end</div><div>• Skip apartments, condos, gated driveways</div><div>• No answer → leave door hanger, log in Jobber</div><div>• ✓ full street done &nbsp; ✗ to flag for Andrew</div></div>`:''}
-    </div>`;
-  });
-  html+=`</div><div class="add-street"><input id="new-street-input" placeholder="Add a street found on the ground..." onkeydown="if(event.key==='Enter')addStreet()"/><button style="border:1px solid ${z.color}30;background:${z.color}10;color:${z.color}" onclick="addStreet()">+ Add</button></div>`;
-  document.getElementById('street-pane').innerHTML=html;
-}
-
-function renderBottomBar() {
-  const z=getZ(), nb=getNb(), streets=getStreets();
-  const done=streets.filter(s=>stOf(z.id,nb.name,s)==='done').length;
-  const skip=streets.filter(s=>stOf(z.id,nb.name,s)==='skip').length;
-  const left=streets.filter(s=>!stOf(z.id,nb.name,s)).length;
-  const pct=streets.length>0?done/streets.length*100:0;
-  document.getElementById('bb-fill').style.width=pct+'%';
-  document.getElementById('bb-fill').style.background=z.color;
-  document.getElementById('bb-stat').textContent=`${done} knocked · ${skip} skip · ${left} left`;
-}
-
-// ── INTERACTIONS ──────────────────────────────────────────────────
-function selectZone(i) { activeZoneIdx=i; activeNbIdx=0; expandedStreet=null; renderAll(); }
-function selectNb(i)   { activeNbIdx=i; expandedStreet=null; renderStreets(); renderSidebar(); renderBottomBar(); }
-function toggleExpand(k) { expandedStreet=expandedStreet===k?null:k; renderStreets(); }
-
-async function toggleStreet(zId,nbName,street,val) {
-  const k=zId+'|'+nbName+'|'+street;
-  if(state.status[k]===val) delete state.status[k]; else state.status[k]=val;
-  const entry={
-    time:new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'}),
-    date:new Date().toLocaleDateString('en-US',{month:'short',day:'numeric'}),
-    timestamp:Date.now(), rep:repName||'Unknown',
-    action:state.status[k]||'cleared', street, zone:zId
-  };
-  state.log=[entry,...state.log].slice(0,200);
-  renderStreets(); renderSidebar(); renderBottomBar(); renderHeader();
-  await saveStatus();
-  await saveLog();
-}
-
-async function addStreet() {
-  const inp=document.getElementById('new-street-input');
-  if(!inp||!inp.value.trim()) return;
-  const nb=getNb(), z=getZ(), k=z.id+'|'+nb.name;
-  state.extra[k]=[...(state.extra[k]||[]),inp.value.trim()];
-  inp.value='';
-  renderStreets(); renderBottomBar();
-  await saveExtra();
-}
-
-async function removeStreet(zId,nbName,street) {
-  const k=zId+'|'+nbName;
-  state.extra[k]=(state.extra[k]||[]).filter(s=>s!==street);
-  delete state.status[zId+'|'+nbName+'|'+street];
-  renderStreets(); renderBottomBar();
-  await saveExtra(); await saveStatus();
-}
-
-// ── RESOURCES ─────────────────────────────────────────────────────
-
-function toggleSection(id) {
-  var body = document.getElementById(id);
-  if (!body) return;
-  var isOpen = body.style.display === 'block';
-  body.style.display = isOpen ? 'none' : 'block';
-  var btn = body.previousElementSibling;
-  if (btn) {
-    var arrow = btn.querySelector('.arrow');
-    if (arrow) arrow.textContent = isOpen ? ' v' : ' ^';
-    btn.classList.toggle('open', !isOpen);
+function renderMgr(){
+  var tot=ZONES.reduce(function(a,z){return a+czS(z).t;},0);
+  var done=ZONES.reduce(function(a,z){return a+czS(z).d;},0);
+  var skip=ZONES.reduce(function(a,z){return a+czS(z).sk;},0);
+  var pct=tot>0?Math.round(done/tot*100):0;
+  var reps=crepS();
+  var mx=Math.max.apply(null,Object.values(reps).map(function(r){return r.d;}).concat([1]));
+  var h='<div class="mc"><div style="font-size:9px;color:#444;letter-spacing:.12em;margin-bottom:8px">SUMMER CAMPAIGN OVERALL</div><div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:10px"><div><div style="font-size:30px;font-weight:700;color:#fff;line-height:1">'+pct+'<span style="font-size:14px;color:#444">%</span></div><div style="font-size:9px;color:#444;margin-top:3px">'+done.toLocaleString()+' knocked - '+skip+' skipped - '+(tot-done-skip).toLocaleString()+' remaining</div></div><div style="display:flex;gap:12px;flex-wrap:wrap">'+[['TOTAL',tot,'#555'],['KNOCKED',done,'#22c55e'],['SKIPPED',skip,'#ef4444'],['LEFT',tot-done-skip,'#f59e0b']].map(function(x){return '<div style="text-align:center"><div style="font-size:18px;font-weight:700;color:'+x[2]+'">'+x[1]+'</div><div style="font-size:7px;color:#333;letter-spacing:.1em">'+x[0]+'</div></div>';}).join('')+'</div></div><div style="margin-top:10px;height:5px;background:#1a1a1a;border-radius:3px"><div style="height:5px;border-radius:3px;background:linear-gradient(90deg,#22d3ee,#22c55e);width:'+pct+'%"></div></div></div>';
+  h+='<div class="mc"><div style="font-size:9px;color:#444;letter-spacing:.12em;margin-bottom:8px">REP ACTIVITY</div>';
+  if(!Object.keys(reps).length){h+='<div style="font-size:10px;color:#252525">No activity yet.</div>';}else{
+    Object.entries(reps).sort(function(a,b){return b[1].d-a[1].d;}).forEach(function(kv,i){var nm=kv[0],d=kv[1];var zc=(ZONES.find(function(z){return z.id===d.zone;})||{}).color||'#333';h+='<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><div style="width:18px;font-size:9px;color:#333;font-weight:700">#'+(i+1)+'</div><div style="width:65px;font-size:10px;font-weight:700;color:#ccc">'+nm+'</div><div style="flex:1;height:18px;background:#141414;border-radius:3px;overflow:hidden;position:relative"><div style="height:100%;width:'+(d.d/mx*100)+'%;background:rgba(34,197,94,.1)"></div><div style="position:absolute;inset:0;display:flex;align-items:center;padding-left:6px;gap:6px"><span style="font-size:8px;color:#22c55e;font-weight:700">'+d.d+' knocked</span>'+(d.sk>0?'<span style="font-size:8px;color:#ef4444">'+d.sk+' skip</span>':'')+'</div></div><div style="font-size:7px;color:#252525;text-align:right;min-width:70px"><div>'+d.date+' '+d.time+'</div><div style="color:'+zc+'">'+d.zone+'</div></div></div>';});
   }
+  h+='</div>';
+  h+='<div style="font-size:9px;color:#444;letter-spacing:.12em;margin-bottom:8px">ZONE BREAKDOWN</div><div class="zg">';
+  ZONES.forEach(function(z){var s=czS(z);var pct=s.t>0?Math.round(s.d/s.t*100):0;h+='<div class="zc"><div style="display:flex;justify-content:space-between;align-items:flex-start"><div><div style="font-size:12px;font-weight:700;color:'+z.color+'">'+z.name+'</div><div style="font-size:7px;color:#333">Wk '+z.wk+' - '+z.avg+' - Tier '+z.tier+'</div></div><div style="font-size:20px;font-weight:700;color:'+(pct===100?'#22c55e':'#fff')+';line-height:1">'+pct+'<span style="font-size:9px;color:#444">%</span></div></div><div style="display:flex;gap:12px;margin-top:8px">'+[['knocked',s.d,'#22c55e'],['skip',s.sk,'#ef4444'],['left',s.r,'#444']].map(function(x){return '<div><div style="font-size:13px;font-weight:700;color:'+x[2]+'">'+x[1]+'</div><div style="font-size:7px;color:#252525">'+x[0].toUpperCase()+'</div></div>';}).join('')+'</div><div style="margin-top:6px;height:3px;background:#1a1a1a;border-radius:2px"><div style="height:3px;border-radius:2px;background:'+z.color+';width:'+pct+'%"></div></div></div>';});
+  h+='</div><div class="mc"><div style="font-size:9px;color:#444;letter-spacing:.12em;margin-bottom:8px">ACTIVITY LOG</div>';
+  if(!ST.log.length){h+='<div style="font-size:10px;color:#252525">No activity yet.</div>';}else{h+='<div class="lw">';ST.log.forEach(function(e){var zc=(ZONES.find(function(z){return z.id===e.zone;})||{}).color||'#444';h+='<div class="lr"><div style="color:#222;min-width:65px">'+e.date+' '+e.time+'</div><div style="font-weight:700;color:#666;min-width:50px">'+e.rep+'</div><div style="font-weight:700;color:'+(e.action==='done'?'#22c55e':e.action==='skip'?'#ef4444':'#444')+';min-width:38px">'+e.action+'</div><div style="color:#333;flex:1">'+e.street+'</div><div style="color:'+zc+'">'+e.zone+'</div></div>';});h+='</div>';}
+  h+='</div>';
+  g('mgr').innerHTML=h;
 }
-
-function buildResources() {
-  // PRICING
-  var pricing_html = '<div class="golden-rule"><div class="gr-title">GOLDEN RULE</div><div class="gr-body">Always quote the full price first. The bundle discount is your closing tool — never your opening offer. If a homeowner pushes back, that is when you bring out the $50 bundle.</div></div>';
-  
-  var services = [
-    {id:'win', title:'Window Cleaning', color:'#3b82f6',
-     rows:[['10-20 windows','$200 min','Bump up if hard-to-reach'],['20-30 windows','$299 min','Standard tier'],['30-40 windows','$399 min','Standard tier'],['40-50 windows','$499 min','Standard tier']],
-     note:'SCREENS: $5/screen. Free screen cleaning ONLY if quote is $100+ above minimum. Default: customer removes own screens. Hard-to-reach = price reflects that.'},
-    {id:'sol', title:'Solar Panel Cleaning', color:'#f59e0b',
-     rows:[['10-20 panels','$149 min','Entry tier'],['20-30 panels','$199 min','Standard tier'],['30-40 panels','$249-$299','Quote $299 first, drop to $249 only if needed'],['50+ panels','$349+ target up','Larger arrays = price reflects time']]},
-    {id:'hws', title:'House Washing (Soft Wash)', color:'#22c55e',
-     rows:[['1,500 sqft','$599 min','~40 cents/sqft'],['2,000 sqft','$700','~35 cents/sqft'],['3,000 sqft','$900','~30 cents/sqft'],['4,000 sqft','$1,100','~28 cents/sqft']],
-     note:'Rate range: 25-35 cents/sqft. Always lead with higher end. Soft wash ONLY on siding.'},
-    {id:'pw', title:'Pressure Washing', color:'#a78bfa',
-     rows:[['One-car driveway','$199','Reference point'],['Two-car driveway','$250','Reference point'],['Patios / walkways','~$0.25/sqft','Measure and quote']],
-     note:'Can throw in a small walkway as a freebie to lock the deal. Nothing bigger without approval.'},
-    {id:'gut', title:'Gutter Cleaning', color:'#34d399',
-     rows:[['Single-story standard','$199','Blowout'],['Small home (2 gutters)','$149','Use only if pushed'],['Two-story home','$249 min / $349 target','Lead with $349, drop to $249 if needed'],['Debris haul-away (add-on)','+$99','Only if customer insists']],
-     note:'Default = pile debris on-site. Tell them: I will pile it neatly so your gardener can grab it. Only offer haul-away if dealbreaker.'},
-    {id:'roof', title:'Roof Services', color:'#f43f5e',
-     rows:[['Roof blow-off (small home)','$100 min','Only for very small footprints'],['Roof blow-off (standard)','$199 min / $249 target','Target up whenever possible'],['Full roof soft wash','$0.40-$0.50/sqft','Includes moss scrubbing, gutter blowout, chemical soft wash']]},
-    {id:'pav', title:'Paver Resanding & Sealing', color:'#fb923c',
-     rows:[['Resanding & resealing','$2.50-$3.50/sqft','Book a quote. Andrew or lead comes out. Do NOT close on door.']]}
-  ];
-  
-  services.forEach(function(s) {
-    pricing_html += '<div class="collapsible">';
-    pricing_html += '<button class="coll-header" onclick="toggleSection(\'sec-'+s.id+'\')" style="width:100%;background:#0f0f0f;border:1px solid #1a1a1a;border-radius:8px;padding:10px 14px;display:flex;justify-content:space-between;align-items:center;text-align:left;cursor:pointer">';
-    pricing_html += '<span style="font-size:11px;font-weight:700;color:'+s.color+'">'+s.title+'</span>';
-    pricing_html += '<span class="arrow" style="font-size:12px;color:#444"> v</span></button>';
-    pricing_html += '<div id="sec-'+s.id+'" style="display:none;background:#0c0c0c;border:1px solid #161616;border-top:none;border-radius:0 0 8px 8px;padding:10px 14px">';
-    pricing_html += '<table style="width:100%;border-collapse:collapse">';
-    pricing_html += '<tr><td style="font-size:8px;color:#444;padding:3px 0;border-bottom:1px solid #1a1a1a">SIZE</td><td style="font-size:8px;color:#444;padding:3px 0;border-bottom:1px solid #1a1a1a">PRICE</td><td style="font-size:8px;color:#444;padding:3px 0;border-bottom:1px solid #1a1a1a">NOTE</td></tr>';
-    s.rows.forEach(function(r) {
-      pricing_html += '<tr><td style="font-size:10px;color:#aaa;padding:5px 0;border-bottom:1px solid #111;width:35%">'+r[0]+'</td><td style="font-size:10px;font-weight:700;color:'+s.color+';padding:5px 0;border-bottom:1px solid #111;width:25%">'+r[1]+'</td><td style="font-size:9px;color:#555;padding:5px 0;border-bottom:1px solid #111">'+r[2]+'</td></tr>';
-    });
-    pricing_html += '</table>';
-    if (s.note) pricing_html += '<div style="margin-top:8px;font-size:10px;color:#555;background:#111;border-radius:5px;padding:7px 10px;line-height:1.6;border-left:2px solid rgba(255,255,255,.1)">'+s.note+'</div>';
-    pricing_html += '</div></div>';
-  });
-
-  // Bundle section
-  pricing_html += '<div class="collapsible"><button class="coll-header" onclick="toggleSection(\'sec-bundle\')" style="width:100%;background:#0f0f0f;border:1px solid rgba(245,158,11,.2);border-radius:8px;padding:10px 14px;display:flex;justify-content:space-between;align-items:center;text-align:left;cursor:pointer"><span style="font-size:11px;font-weight:700;color:#f59e0b">Bundle Discounts - Your Closing Tool</span><span class="arrow" style="font-size:12px;color:#444"> v</span></button>';
-  pricing_html += '<div id="sec-bundle" style="display:none;background:#0c0c0c;border:1px solid #161616;border-top:none;border-radius:0 0 8px 8px;padding:10px 14px">';
-  pricing_html += '<div style="font-size:10px;color:#777;margin-bottom:10px;line-height:1.5">Quote both services at full price first. If they hesitate say: If we book both today I can knock $50 off the total. Make them earn it.</div>';
-  pricing_html += '<div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #141414"><span style="font-size:10px;color:#888">Any 2 services booked together</span><span style="font-size:10px;font-weight:700;color:#f59e0b">$50 off</span></div>';
-  pricing_html += '<div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #141414"><span style="font-size:10px;color:#888">High-ticket bundle (well above min)</span><span style="font-size:10px;font-weight:700;color:#f59e0b">Up to $100 off</span></div>';
-  pricing_html += '<div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #141414"><span style="font-size:10px;color:#888">Anything beyond $100 off</span><span style="font-size:10px;font-weight:700;color:#f59e0b">Manager approval required</span></div>';
-  pricing_html += '<div style="display:flex;gap:10px;margin-top:12px">';
-  pricing_html += '<div style="flex:1"><div style="font-size:9px;font-weight:700;color:#22c55e;margin-bottom:5px">DO</div>';
-  var dos = ['Quote full price first','Lead with higher end of range','Use bundle only when closing','Make customer earn the discount','Charge for hard-to-reach work','Confirm screen removal liability'];
-  dos.forEach(function(d){pricing_html+='<div style="font-size:9px;color:#1a4a1a;line-height:1.7">+ '+d+'</div>';});
-  pricing_html += '</div><div style="flex:1"><div style="font-size:9px;font-weight:700;color:#ef4444;margin-bottom:5px">DON'T</div>';
-  var donts = ['Open with bundle price','Drop below minimums without approval','Throw in haul-away for free','Quote pavers on the door','Discount the discount','Promise free screens unless $100+ above min'];
-  donts.forEach(function(d){pricing_html+='<div style="font-size:9px;color:#4a1a1a;line-height:1.7">- '+d+'</div>';});
-  pricing_html += '</div></div></div></div>';
-  
-  document.getElementById('res-pricing').innerHTML = pricing_html;
-
-  // SCRIPT
-  var script_html = '<div style="font-size:10px;color:#444;margin-bottom:12px;line-height:1.5">One opening. One qualifying question. Match to their need. Bust the smokescreen. Close.</div>';
-  
-  var sections = [
-    {id:'s0', title:'Before You Knock', color:'#64748b', html:'<div style="font-size:10px;font-weight:700;color:#64748b;margin-bottom:5px">Physical Setup</div><div style="display:flex;flex-direction:column;gap:2px;margin-bottom:10px"><div style="font-size:11px;color:#aaa;line-height:1.6">+ AJ Home Services shirt on - visible branding</div><div style="font-size:11px;color:#aaa;line-height:1.6">+ Clipboard or phone in hand - looks professional</div><div style="font-size:11px;color:#aaa;line-height:1.6">+ Stand 1-2 steps back from door - less threatening</div><div style="font-size:11px;color:#aaa;line-height:1.6">+ Feet shoulder width apart - grounded and confident</div><div style="font-size:11px;color:#aaa;line-height:1.6">+ Hands visible - never in pockets</div><div style="font-size:11px;color:#aaa;line-height:1.6">+ Smile before the door opens - it carries in your voice</div></div><div style="font-size:10px;font-weight:700;color:#64748b;margin-bottom:5px">Know Before You Knock</div><div style="display:flex;flex-direction:column;gap:2px"><div style="font-size:11px;color:#aaa;line-height:1.6">+ 1-2 neighbor names from Jobber on this street</div><div style="font-size:11px;color:#aaa;line-height:1.6">+ What services those neighbors booked</div><div style="font-size:11px;color:#aaa;line-height:1.6">+ Rough home size - look at the house before knocking</div><div style="font-size:11px;color:#aaa;line-height:1.6">+ Phone charged - you will book and log on the spot</div><div style="font-size:11px;color:#aaa;line-height:1.6">+ Business cards in pocket for every unanswered door</div></div>'},
-    {id:'s1', title:'Step 1 - The Opening', color:'#22d3ee', html:'<div style="font-size:10px;font-weight:700;color:#22d3ee;margin-bottom:5px">Standard Opening</div><div style="font-size:11px;color:#ccc;line-height:1.7;background:#111;border-radius:6px;padding:8px 10px;border-left:2px solid rgba(34,211,238,.3);margin-bottom:8px">Hey, how's it going? I'm [Name] with AJ Home Services. We're actually working on a few homes on your street this week - we just finished [neighbor]'s place down the block. We do everything on the exterior - house washing, gutters, windows, solar panels, pressure washing, roof cleaning. While we're already set up out here we have some availability and we're offering a group rate to neighbors. Is there anything on the exterior you've been meaning to get taken care of?</div><div style="font-size:10px;color:#555;background:#0e0e0e;border-radius:5px;padding:5px 8px;border-left:2px solid #333;margin-bottom:10px">Point down the street toward the neighbor's house when you say their name. Make eye contact when you ask the question.</div><div style="font-size:10px;font-weight:700;color:#22d3ee;margin-bottom:5px">Power Version - Just Finished Nearby</div><div style="font-size:11px;color:#ccc;line-height:1.7;background:#111;border-radius:6px;padding:8px 10px;border-left:2px solid rgba(34,211,238,.3);margin-bottom:8px">Hey - I'm [Name] with AJ Home Services. We literally just finished [neighbor]'s place right there. You can probably see the difference from here. While the crew is still set up on your street I wanted to see if there's anything we could take care of for you too. What's the biggest thing you've been wanting to get done out here?</div><div style="font-size:10px;color:#f59e0b;background:#1a1000;border-radius:5px;padding:5px 8px">Power version converts 2-3x better. Always knock the 5 nearest houses immediately after finishing a job - do not wait.</div>'},
-    {id:'s2', title:'Step 2 - The Qualifying Question', color:'#a78bfa', html:'<div style="font-size:11px;color:#ccc;line-height:1.7;background:#111;border-radius:6px;padding:8px 10px;border-left:2px solid rgba(167,139,250,.3);margin-bottom:8px">Let me ask you - when you look at the outside of your house, what bothers you most? Is it the exterior itself, the windows, the gutters, the driveway - or is there something specific you've been putting off?</div><div style="font-size:10px;color:#555;background:#0e0e0e;border-radius:5px;padding:5px 8px;border-left:2px solid #333;margin-bottom:6px">Casually glance around their property. If you spot something obvious, point to it.</div><div style="font-size:10px;color:#f59e0b;background:#1a1000;border-radius:5px;padding:5px 8px">Once they answer, go straight to the matching service branch below. Their answer is your roadmap.</div>'},
-    {id:'s3', title:'Step 3 - Service Branches', color:'#f59e0b', html:'<div style="font-size:10px;color:#555;margin-bottom:10px">Use the branch that matches what they said they need.</div><div style="font-size:10px;font-weight:700;color:#f59e0b;margin-bottom:4px">1. House Washing</div><div style="font-size:11px;color:#ccc;line-height:1.7;background:#111;border-radius:6px;padding:8px 10px;border-left:2px solid rgba(245,158,11,.3);margin-bottom:6px">Perfect - that's actually what we've been doing all week on your street. We do a soft wash which is way more effective than a regular pressure washer on siding - it gets into the pores and kills the mold and mildew at the root so it stays clean way longer. For a home your size with the group rate we're looking at about $[price]. You don't even need to be home - we text you before and after with photos.</div><div style="font-size:10px;color:#22c55e;background:#0a1a0a;border-radius:5px;padding:5px 8px;border-left:2px solid rgba(34,197,94,.25);margin-bottom:12px">Bundle: While the crew is up on the house anyway - when did you last have the gutters cleared? I can bundle that in and you save yourself a separate call later.</div><div style="font-size:10px;font-weight:700;color:#f59e0b;margin-bottom:4px">2. Gutter Cleaning</div><div style="font-size:11px;color:#ccc;line-height:1.7;background:#111;border-radius:6px;padding:8px 10px;border-left:2px solid rgba(245,158,11,.3);margin-bottom:6px">Yeah gutters are one of those things that are easy to forget until they start causing real problems - once they overflow it backs up under the roofline and into the fascia boards. Expensive fix. We go up, completely clear everything out, flush the downspouts, and rinse the roofline. For a home your size with the group rate we're at about $[price]. Takes about an hour.</div><div style="font-size:10px;color:#22c55e;background:#0a1a0a;border-radius:5px;padding:5px 8px;border-left:2px solid rgba(34,197,94,.25);margin-bottom:12px">Bundle: Since the crew is already going to be up on ladders - is the exterior of the house something you'd want handled at the same time?</div><div style="font-size:10px;font-weight:700;color:#f59e0b;margin-bottom:4px">3. Window Cleaning</div><div style="font-size:11px;color:#ccc;line-height:1.7;background:#111;border-radius:6px;padding:8px 10px;border-left:2px solid rgba(245,158,11,.3);margin-bottom:6px">Windows make such a big difference - it changes how the whole house looks from the outside and how much light you get inside. We do full exterior cleaning, tracks, and screens. For hard water stains we have a treatment that removes the mineral buildup that regular cleaning can't touch. For a home your size we're at about $[price] with the group rate.</div><div style="font-size:10px;color:#22c55e;background:#0a1a0a;border-radius:5px;padding:5px 8px;border-left:2px solid rgba(34,197,94,.25);margin-bottom:12px">Bundle: If you have solar panels - dirty windows and dirty panels are basically the same problem. Do you have solar?</div><div style="font-size:10px;font-weight:700;color:#f59e0b;margin-bottom:4px">4. Solar Panel Cleaning</div><div style="font-size:11px;color:#ccc;line-height:1.7;background:#111;border-radius:6px;padding:8px 10px;border-left:2px solid rgba(245,158,11,.3);margin-bottom:6px">Solar panels lose 15-25% of their efficiency when they get dirty. Most people don't realize how much it's actually affecting their energy bill. We use a deionized water system that won't scratch the panels or void your warranty. For a typical residential system with the group rate it's about $[price].</div><div style="font-size:10px;color:#22c55e;background:#0a1a0a;border-radius:5px;padding:5px 8px;border-left:2px solid rgba(34,197,94,.25);margin-bottom:12px">Bundle: While we're up on the roof area - are the gutters something that needs attention too?</div><div style="font-size:10px;font-weight:700;color:#f59e0b;margin-bottom:4px">5. Pressure Washing</div><div style="font-size:11px;color:#ccc;line-height:1.7;background:#111;border-radius:6px;padding:8px 10px;border-left:2px solid rgba(245,158,11,.3);margin-bottom:6px">Yeah the driveway and concrete are something people notice a lot. We do a hot water pressure wash that gets deep into the pores of the concrete and lifts the staining and oil out. For a standard driveway with the group rate we're looking at $[price].</div><div style="font-size:10px;color:#22c55e;background:#0a1a0a;border-radius:5px;padding:5px 8px;border-left:2px solid rgba(34,197,94,.25);margin-bottom:12px">Bundle: And if the house exterior is something you've been thinking about too - soft washing the house and doing the driveway together is a really popular combo.</div><div style="font-size:10px;font-weight:700;color:#f59e0b;margin-bottom:4px">6. Roof Cleaning</div><div style="font-size:11px;color:#ccc;line-height:1.7;background:#111;border-radius:6px;padding:8px 10px;border-left:2px solid rgba(245,158,11,.3);margin-bottom:6px">Those black streaks are actually a bacteria called gloeocapsa magma - it feeds on the limestone in your shingles and spreads over time. Left alone it shortens the life of your roof by years. We do a low pressure soft wash treatment that kills it at the root. Results last 2-3 years. For a home your size with the group rate we're looking at $[price].</div><div style="font-size:10px;color:#22c55e;background:#0a1a0a;border-radius:5px;padding:5px 8px;border-left:2px solid rgba(34,197,94,.25)">Bundle: While we're up there - the gutters are worth checking too. I can bundle that in and the crew handles both in one visit.</div>'},
-    {id:'s4', title:'Step 4 - The Close', color:'#22c55e', html:'<div style="font-size:11px;color:#ccc;line-height:1.7;background:#111;border-radius:6px;padding:8px 10px;border-left:2px solid rgba(34,197,94,.3);margin-bottom:8px">So did you want to go ahead and get that locked in? I can get you on the schedule for this week while we're already in the neighborhood. What works better - tomorrow or later in the week?</div><div style="font-size:10px;color:#555;background:#0e0e0e;border-radius:5px;padding:5px 8px;border-left:2px solid #333;margin-bottom:10px">Plant your feet. Hold eye contact. The silence after this question is part of the close - do not fill it. First person to speak loses.</div><div style="font-size:10px;font-weight:700;color:#22c55e;margin-bottom:4px">If they hesitate on the bundle</div><div style="font-size:11px;color:#ccc;line-height:1.7;background:#111;border-radius:6px;padding:8px 10px;border-left:2px solid rgba(34,197,94,.3);margin-bottom:6px">Totally fine - even if you just want to start with the [primary service] today and we come back for the rest, that works too. Want to at least lock in the [primary service] while the group rate is available?</div><div style="font-size:10px;color:#f59e0b;background:#1a1000;border-radius:5px;padding:5px 8px">One service booked is infinitely better than zero. Never leave empty-handed if there is any interest at all.</div>'},
-    {id:'s5', title:'Step 5 - Smokescreen Objections', color:'#f43f5e', html:'<div style="font-size:10px;color:#555;margin-bottom:10px;line-height:1.5">A smokescreen is a polite way of saying no without saying no. Ask one more genuine question to find the real barrier.</div><div style="font-size:10px;color:#f43f5e;background:#1a0000;border-radius:5px;padding:6px 9px;margin-bottom:12px">Universal buster: "Hey - totally respect that. Can I ask honestly - is it a hard no or more of a not right now?"</div><div style="font-size:10px;font-weight:700;color:#f43f5e;margin-bottom:4px">"I need to think about it"</div><div style="font-size:11px;color:#ccc;line-height:1.7;background:#111;border-radius:6px;padding:8px 10px;border-left:2px solid rgba(244,63,94,.3);margin-bottom:6px">Totally get that. Can I ask - is it more about the timing, the price, or just not sure if you need it done right now? I want to make sure I answered everything before I leave.</div><div style="font-size:10px;color:#818cf8;background:#0a0a1a;border-radius:5px;padding:5px 8px;margin-bottom:12px">If price: "I hear you - the group rate is the best I can do while we're on your street. If it helps I can break it into two visits so it's not all at once."</div><div style="font-size:10px;font-weight:700;color:#f43f5e;margin-bottom:4px">"Send me some info"</div><div style="font-size:11px;color:#ccc;line-height:1.7;background:#111;border-radius:6px;padding:8px 10px;border-left:2px solid rgba(244,63,94,.3);margin-bottom:6px">Of course - what's the best number? I'll text you right now so you have it. And honestly the best way to see our work is the before and after photos - let me pull one up real quick.</div><div style="font-size:10px;color:#818cf8;background:#0a0a1a;border-radius:5px;padding:5px 8px;margin-bottom:12px">After photos: "Pretty dramatic right? That's a house two streets over. Is that the kind of result you'd want for yours?"</div><div style="font-size:10px;font-weight:700;color:#f43f5e;margin-bottom:4px">"I have to ask my spouse"</div><div style="font-size:11px;color:#ccc;line-height:1.7;background:#111;border-radius:6px;padding:8px 10px;border-left:2px solid rgba(244,63,94,.3);margin-bottom:6px">Absolutely makes sense. Is he/she home right now? I can take two minutes to walk you both through it. Or a lot of couples just do a quick text - want to shoot them a message right now while I'm here?</div><div style="font-size:10px;color:#818cf8;background:#0a0a1a;border-radius:5px;padding:5px 8px;margin-bottom:12px">If not home: "Let me text you the details right now so you can show them. When do you think you'd have a chance to chat about it?" Get a specific day and follow up exactly then.</div><div style="font-size:10px;font-weight:700;color:#f43f5e;margin-bottom:4px">"We already have someone"</div><div style="font-size:11px;color:#ccc;line-height:1.7;background:#111;border-radius:6px;padding:8px 10px;border-left:2px solid rgba(244,63,94,.3);margin-bottom:6px">Oh nice - who do you use? How have they been? Are you happy with them?</div><div style="font-size:10px;color:#818cf8;background:#0a0a1a;border-radius:5px;padding:5px 8px;margin-bottom:12px">If they hesitate: "A lot of our clients switched to us after having some inconsistency. We document everything with before and after photos and the owner personally follows up after each visit."</div><div style="font-size:10px;font-weight:700;color:#f43f5e;margin-bottom:4px">"Not right now / maybe later"</div><div style="font-size:11px;color:#ccc;line-height:1.7;background:#111;border-radius:6px;padding:8px 10px;border-left:2px solid rgba(244,63,94,.3);margin-bottom:6px">Totally understand - when do you think you'd want to get it done? Summer? Fall? I ask because our schedule fills up fast in peak season.</div><div style="font-size:10px;color:#818cf8;background:#0a0a1a;border-radius:5px;padding:5px 8px">If they give a timeframe: "Perfect - what if I reach out in [month]? I'll put you on our early booking list so you get priority scheduling. What's the best number?"</div>'},
-    {id:'s6', title:'Step 6 - After Every Door', color:'#818cf8', html:'<div style="font-size:10px;font-weight:700;color:#818cf8;margin-bottom:5px">If they book</div><div style="display:flex;flex-direction:column;gap:2px;margin-bottom:12px"><div style="font-size:11px;color:#aaa;line-height:1.6">+ Get name, number, best day and time</div><div style="font-size:11px;color:#aaa;line-height:1.6">+ Log in Jobber immediately - do not wait</div><div style="font-size:11px;color:#aaa;line-height:1.6">+ Confirm text to client within 5 minutes</div><div style="font-size:11px;color:#aaa;line-height:1.6">+ Knock the 4-5 nearest neighbors right now</div><div style="font-size:11px;color:#aaa;line-height:1.6">+ Tell manager so crew is scheduled</div></div><div style="font-size:10px;font-weight:700;color:#818cf8;margin-bottom:5px">If they don't book</div><div style="display:flex;flex-direction:column;gap:2px"><div style="font-size:11px;color:#aaa;line-height:1.6">+ Leave a business card - every single time</div><div style="font-size:11px;color:#aaa;line-height:1.6">+ If they gave a number - follow up in 2 days</div><div style="font-size:11px;color:#aaa;line-height:1.6">+ If they gave a timeframe - set a Jobber reminder</div><div style="font-size:11px;color:#aaa;line-height:1.6">+ Walk away cleanly - never linger or look defeated</div></div>'}
-  ];
-  
-  sections.forEach(function(sec) {
-    script_html += '<div class="collapsible" style="margin-bottom:8px">';
-    script_html += '<button class="coll-header" onclick="toggleSection(\'sec-'+sec.id+'\')" style="width:100%;background:#0f0f0f;border:1px solid #1a1a1a;border-radius:8px;padding:10px 14px;display:flex;justify-content:space-between;align-items:center;text-align:left;cursor:pointer">';
-    script_html += '<span style="font-size:11px;font-weight:700;color:'+sec.color+'">'+sec.title+'</span>';
-    script_html += '<span class="arrow" style="font-size:12px;color:#444"> v</span></button>';
-    script_html += '<div id="sec-'+sec.id+'" style="display:none;background:#0c0c0c;border:1px solid #161616;border-top:none;border-radius:0 0 8px 8px;padding:12px 14px">';
-    script_html += sec.html;
-    script_html += '</div></div>';
-  });
-  
-  document.getElementById('res-script').innerHTML = script_html;
-}
-
-
-
-// ── MANAGER ───────────────────────────────────────────────────────
-function renderManager() {
-  const tot=ZONES.reduce((a,z)=>a+calcZone(z).total,0);
-  const done=ZONES.reduce((a,z)=>a+calcZone(z).done,0);
-  const skip=ZONES.reduce((a,z)=>a+calcZone(z).skip,0);
-  const pct=tot>0?Math.round(done/tot*100):0;
-  const reps=calcReps();
-  const maxDone=Math.max(...Object.values(reps).map(r=>r.done),1);
-
-  let html=`<div class="mgr-card">
-    <div class="mc-label">SUMMER CAMPAIGN OVERALL</div>
-    <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:10px">
-      <div><div class="overall-pct">${pct}<span>%</span></div><div class="overall-sub">${done.toLocaleString()} knocked · ${skip} skipped · ${(tot-done-skip).toLocaleString()} remaining</div></div>
-      <div class="stat-row">
-        ${[['TOTAL',tot,'#555'],['KNOCKED',done,'#22c55e'],['SKIPPED',skip,'#ef4444'],['LEFT',tot-done-skip,'#f59e0b']].map(([l,v,c])=>`<div class="stat-item"><div class="si-val" style="color:${c}">${v}</div><div class="si-label">${l}</div></div>`).join('')}
-      </div>
-    </div>
-    <div class="overall-bar"><div class="overall-bar-fill" style="width:${pct}%"></div></div>
-  </div>`;
-
-  html+=`<div class="mgr-card"><div class="mc-label">REP ACTIVITY</div>`;
-  if(!Object.keys(reps).length) {
-    html+=`<div style="font-size:10px;color:#252525">No activity yet.</div>`;
-  } else {
-    Object.entries(reps).sort((a,b)=>b[1].done-a[1].done).forEach(([name,d],i)=>{
-      const zcolor=ZONES.find(z=>z.id===d.zone)?.color||'#333';
-      html+=`<div class="rep-row">
-        <div class="rep-rank">#${i+1}</div>
-        <div class="rep-name">${name}</div>
-        <div class="rep-bar-wrap"><div class="rep-bar-fill" style="width:${d.done/maxDone*100}%"></div>
-          <div class="rep-bar-label"><span class="rbl-done">${d.done} knocked</span>${d.skip>0?`<span class="rbl-skip">${d.skip} skip</span>`:''}</div>
-        </div>
-        <div class="rep-meta"><div>${d.date} ${d.time}</div><div style="color:${zcolor}">${d.zone}</div></div>
-      </div>`;
-    });
-  }
-  html+=`</div>`;
-
-  html+=`<div style="font-size:9px;color:#444;letter-spacing:.12em;margin-bottom:8px">ZONE BREAKDOWN</div><div class="zone-grid">`;
-  ZONES.forEach(z=>{
-    const s=calcZone(z);
-    const pct=s.total>0?Math.round(s.done/s.total*100):0;
-    const active=mgExpandedZone===z.id;
-    html+=`<div class="zone-card ${active?'active':''}" style="${active?'border-color:'+z.color+'40;background:'+z.color+'0e':''}" onclick="toggleMgZone('${z.id}')">
-      <div class="zc-header">
-        <div><div class="zc-name" style="color:${z.color}">${z.name}</div><div class="zc-sub">Wk ${z.weeks} · ${z.avgHome} · Tier ${z.tier}</div></div>
-        <div class="zc-pct" style="color:${pct===100?'#22c55e':'#fff'}">${pct}<span>%</span></div>
-      </div>
-      <div class="zc-stats">
-        ${[['knocked',s.done,'#22c55e'],['skip',s.skip,'#ef4444'],['left',s.remaining,'#444']].map(([l,v,c])=>`<div class="zc-stat"><div class="zcs-val" style="color:${c}">${v}</div><div class="zcs-label">${l.toUpperCase()}</div></div>`).join('')}
-      </div>
-      <div class="zc-bar"><div class="zc-bar-fill" style="width:${pct}%;background:${z.color}"></div></div>
-      ${active?`<div class="nb-breakdown">${z.neighborhoods.map(nb=>{const ns=calcNb(z.id,nb);const np=ns.total>0?Math.round(ns.done/ns.total*100):0;return`<div class="nbb-row"><div class="nbb-header"><div class="nbb-name">${nb.name}</div><div class="nbb-pct" style="color:${np===100?'#22c55e':'#333'}">${np}%</div></div><div class="nbb-bar"><div class="nbb-bar-fill" style="width:${np}%;background:${z.color}80"></div></div><div class="nbb-stat">${ns.done}/${ns.total} · ${ns.skip} skip</div></div>`;}).join('')}</div>`:''}
-    </div>`;
-  });
-  html+=`</div>`;
-
-  html+=`<div class="mgr-card"><div class="mc-label">ACTIVITY LOG</div>`;
-  if(!state.log.length){html+=`<div style="font-size:10px;color:#252525">No activity yet.</div>`;}
-  else {
-    html+=`<div class="log-table">`;
-    state.log.forEach(e=>{
-      const zc=ZONES.find(z=>z.id===e.zone)?.color||'#444';
-      html+=`<div class="lt-row"><div class="lt-time">${e.date} ${e.time}</div><div class="lt-rep">${e.rep}</div><div class="lt-action" style="color:${e.action==='done'?'#22c55e':e.action==='skip'?'#ef4444':'#333'}">${e.action}</div><div class="lt-street">${e.street}</div><div class="lt-zone" style="color:${zc}">${e.zone}</div></div>`;
-    });
-    html+=`</div>`;
-  }
-  html+=`</div>`;
-  document.getElementById('manager').innerHTML=html;
-}
-
-function toggleMgZone(id) {
-  mgExpandedZone=mgExpandedZone===id?null:id;
-  renderManager();
-}
-
-// ── INIT ──────────────────────────────────────────────────────────
-document.getElementById('pw-input').focus();
-buildResources();
-renderResources();
+g('pw').focus();
 </script>
 </body>
 </html>
